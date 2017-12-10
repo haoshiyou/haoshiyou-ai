@@ -90,7 +90,7 @@ export class HsyExtractor {
       'santa clara',
       'mtv',
       "Alameda","El Cerrito","Mountain View","San Leandro","Albany","Emeryville","Napa","San Mateo","American Canyon","Fairfax","Newark","San Pablo","Antioch","Fairfield","Novato","San Rafael","Atherton","Foster City","Oakland","San Ramon","Belmont","Fremont","Oakley","Santa Clara","Belvedere","Gilroy","Orinda","Santa Rosa","Benicia","Half Moon Bay","Pacifica","Saratoga","Berkeley","Hayward","Palo Alto","Sausalito","Brentwood","Healdsburg","Petaluma","Sebastopol","Brisbane","Hercules","Piedmont","Sonoma","Burlingame","Hillsborough","Pinole","South San Francisco","Calistoga","Lafayette","Pittsburg","St. Helena","Campbell","Larkspur","Pleasant Hill","Suisun City","Clayton","Livermore","Pleasanton","Sunnyvale","Cloverdale","Los Altos","Portola Valley","Tiburon","Colma","Los Altos Hills","Redwood City","Union City","Concord","Los Gatos","Richmond","Vacaville","Corte Madera","Martinez","Rio Vista","Vallejo","Cotati","Menlo Park","Rohnert Park","Walnut Creek","Cupertino","Mill Valley","Ross","Windsor","Daly City","Millbrae","San Anselmo","Woodside","Danville","Milpitas","San Bruno","Yountville","Dixon","Monte Sereno","San Carlos","Dublin","Moraga","San Francisco","East Palo Alto","Morgan Hill","San Jose", // From http://www.bayareacensus.ca.gov/cities/cities.htm
-
+      "Stanford", "斯坦福",
       "阿拉米达","山景城",'芒廷维尔', '芒廷维儿',"纳帕","圣马特奥","纽瓦克","福斯特城","奥克兰","贝尔蒙特","弗里蒙特","圣塔克拉拉","半月湾","太平洋城","萨拉托加","伯克利","海沃德","帕罗奥图", '帕洛阿托', "帕罗奥多","南三番", "南旧金山", '南三藩',"利弗莫尔","桑尼维尔", '阳谷县',"红木城","门罗帕克", '门罗公园',"库比蒂诺","苗必达", '三番', '旧金山', '三藩','圣何塞',
     ]
         .map(s => s.toUpperCase());
