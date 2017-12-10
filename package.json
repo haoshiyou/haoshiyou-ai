@@ -1,0 +1,10 @@
+{
+  "name": "haoshiyou-ai",
+  "version": "0.0.1",
+  "dependencies": {
+    "@types/csv-parse": "^1.1.11",
+    "csv": "^2.0.0",
+    "csv-parse": "^2.0.0"
+  },
+  "license": "MIT"
+}
