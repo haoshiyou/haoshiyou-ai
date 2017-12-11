@@ -1,5 +1,6 @@
 
 export class HsyExtractor {
+  private static debug:boolean = false;
   public static extractPrice(msg:string, data):any {
     // Not a phone number
     // Not a street number
@@ -13,7 +14,7 @@ export class HsyExtractor {
       let matchedStr = ret[0];
       let index = ret.index;
       let substr = msg.substr(Math.max(0, index - 10), Math.min(msg.length, index + 10));
-      console.log(`${JSON.stringify({
+      if (HsyExtractor.debug) console.log(`${JSON.stringify({
         price: matchedStr,
         substr: substr
       }, null, ' ')}`);
@@ -30,7 +31,7 @@ export class HsyExtractor {
       let matchedStr = ret[0];
       let index = ret.index;
       let substr = msg.substr(Math.max(0, index - 20), Math.min(msg.length, index + 10));
-      console.log(`${JSON.stringify({
+      if (HsyExtractor.debug) console.log(`${JSON.stringify({
         phone: matchedStr,
         substr: substr
       }, null, ' ')}`);
@@ -47,7 +48,7 @@ export class HsyExtractor {
       let matchedStr = ret[0];
       let index = ret.index;
       let substr = msg.substr(Math.max(0, index - 20), Math.min(msg.length, index + 10));
-      console.log(`${JSON.stringify({
+      if (HsyExtractor.debug) console.log(`${JSON.stringify({
         email: matchedStr,
         substr: substr
       }, null, ' ')}`);
@@ -63,7 +64,7 @@ export class HsyExtractor {
       let matchedStr = ret[0];
       let index = ret.index;
       let substr = msg.substr(Math.max(0, index - 20), Math.min(msg.length, index + 10));
-      console.log(`${JSON.stringify({
+      if (HsyExtractor.debug) console.log(`${JSON.stringify({
         zipcode: matchedStr,
         substr: substr
       }, null, ' ')}`);
@@ -101,7 +102,7 @@ export class HsyExtractor {
       let matchedStr = ret[0];
       let index = ret.index;
       let substr = msg.substr(Math.max(0, index - 20), Math.min(msg.length, index + 10));
-      console.log(`${JSON.stringify({
+      if (HsyExtractor.debug) console.log(`${JSON.stringify({
         city: matchedStr,
         substr: substr
       }, null, ' ')}`);
@@ -118,7 +119,7 @@ export class HsyExtractor {
       let matchedStr = ret[0];
       let index = ret.index;
       let substr = msg.substr(Math.max(0, index - 20), Math.min(msg.length, index + 10));
-      console.log(`${JSON.stringify({
+      if (HsyExtractor.debug) console.log(`${JSON.stringify({
         addr: matchedStr,
         substr: substr
       }, null, ' ')}`);
