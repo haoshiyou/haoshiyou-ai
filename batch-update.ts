@@ -4,7 +4,7 @@ import {HsyExtractor} from "./extractor";
 
 const config = {
   "loopback": {
-    "http://haoshiyou-server-dev.herokuapp.com": {
+    "http://localhost:3000": {
       "__domain": {
         "auth": {
           "auth": {"bearer": "[0]"}
@@ -23,6 +23,8 @@ const request = require('request');
 const promise = require('bluebird');
 const purest = require('purest')({request, promise});
 const loopback = purest({provider: 'loopback', config});
+
+const realRun = process.env['REAL_RUN'] || false;
 
 async function main() {
   let req = loopback
@@ -76,32 +78,27 @@ async function main() {
       let flagDirty:boolean = false;
       if (hsyListing.owner && phone) {
         hsyListing.owner.contactPhone = phone;
-        console.log(`Update phone for ${hsyListing.uid}`);
         flagDirty = true;
         updateCount.phone++;
       }
       if (city) {
         hsyListing.addressCity = city;
-        console.log(`Update city for ${hsyListing.uid}`);
         flagDirty = true;
         updateCount.city++;
 
       }
       if (zipcode) {
         hsyListing.addressZipcode = zipcode;
-        console.log(`Update zipcode for ${hsyListing.uid}`);
         flagDirty = true;
         updateCount.zipcode++;
       }
       if (price) {
         hsyListing.price = price;
-        console.log(`Update price for ${hsyListing.uid}`);
         flagDirty = true;
         updateCount.price++;
       }
       if (hsyListing.owner && email) {
         hsyListing.owner.contactEmail = email;
-        console.log(`Update contactEmail for ${hsyListing.uid}`);
         flagDirty = true;
         updateCount.email++;
       }
@@ -118,7 +115,26 @@ async function main() {
   Image Only: ${imageOnly.length},
   Detailed count: 
   ${JSON.stringify(updateCount, null, '  ')}`);
-
+  if (realRun) {
+    console.log(`Warning: real update!`);
+    let success = 0;
+    let failure = 0;
+    let processes = toUpdate.map(l => loopback.put('HsyListings')
+        .json(l)
+        .request()
+        .then(l => {
+          success ++;
+          return l;
+        })
+        .catch(e => {
+          failure ++;
+          return e;
+        }));
+    let result = await Promise.all(processes);
+    console.log(`Succes ${success}, Fialure ${failure}`);
+  } else {
+    console.log(`Not real run, just for fun!`);
+  }
 }
 
 main()
