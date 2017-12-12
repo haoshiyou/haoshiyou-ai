@@ -78,18 +78,21 @@ export class HsyExtractor {
     // let reg = /(微信|WeChat|Weixin)/i;
     // let reg = /(微信|WeChat|Weixin)(\ *(号码|账号|帳號|號|号|id)\ *)?(\ *(is|是|:|：|联系)\ *)?([A-Za-z0-9_]+)/i;
     let reg = /(微信|WeChat|Weixin)\ *(敬)?(请)?(联系|加)?(或电话)?\ *(号码|账号|帳號|號|号|id)?\ *(:|：)*\ *\W{0,6}([a-zA-Z0-9_-])+/i;
-    let ret= msg.match(reg);
-    if (ret) {
-      let matchedStr = ret[0];
-      let index = ret.index;
-      let substr = msg.substr(Math.max(0, index - 20), Math.min(msg.length, index + 30));
+    let firstRet= msg.match(reg);
+    if (!firstRet) return null ;
+    let regSecond = /([a-zA-Z0-9_-]){4,}$/i;
+    let secondRet = firstRet[0].match(regSecond);
+    if (secondRet) {
+      let matchedStr = secondRet[0];
+      let index = firstRet.index;
+      let substr = msg.substr(Math.max(0, index - 20), Math.min(msg.length, index + 60));
       if (HsyExtractor.debug || true) console.log(`${JSON.stringify({
         uid: data.uid,
-        zipcode: matchedStr,
+        firstRet: firstRet[0],
+        wechat: matchedStr,
         substr: substr,
-        full: data.content
       }, null, ' ')}`);
-      return ret[0];
+      return secondRet[0];
     }
     return null;
   }
