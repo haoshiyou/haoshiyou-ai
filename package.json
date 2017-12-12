@@ -10,5 +10,23 @@
     "purest": "^3.1.0",
     "request": "^2.83.0"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "description": "This is the extraction algorithm that extracts data from the message.",
+  "main": "main.ts",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xinbenlv/haoshiyou-ai.git"
+  },
+  "keywords": [
+    "haoshiyou"
+  ],
+  "author": "Zainan Victor Zhou",
+  "bugs": {
+    "url": "https://github.com/xinbenlv/haoshiyou-ai/issues"
+  },
+  "homepage": "https://github.com/xinbenlv/haoshiyou-ai#readme"
 }
