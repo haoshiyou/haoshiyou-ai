@@ -80,7 +80,7 @@ export class HsyExtractor {
     let reg = /(微信|WeChat|Weixin)\ *(敬)?(请)?(联系|加)?(或电话)?\ *(号码|账号|帳號|號|号|id)?\ *(:|：)*\ *\W{0,6}([a-zA-Z0-9_-])+/i;
     let firstRet= msg.match(reg);
     if (!firstRet) return null ;
-    let regSecond = /([a-zA-Z0-9_-]){4,}$/i;
+    let regSecond = /([a-zA-Z0-9_-]){6,20}$/i;
     let secondRet = firstRet[0].match(regSecond);
     if (secondRet) {
       let matchedStr = secondRet[0];
