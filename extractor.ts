@@ -96,7 +96,6 @@ export class HsyExtractor {
       let index = firstRet.index;
       let substr = msg.substr(Math.max(0, index - 20), Math.min(msg.length, index + 60));
       if (HsyExtractor.debug || true) console.log(`${JSON.stringify({
-        uid: data.uid,
         firstRet: firstRet[0],
         wechat: matchedStr,
         substr: substr,
