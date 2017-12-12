@@ -73,8 +73,68 @@ export class HsyExtractor {
     return null;
   }
 
+  public static extractWeChat(msg, data) {
+    // let reg = /(微信|WeChat|WeiXin)(\ ?ID)?[:：\ ]*[A-Za-z0-9_]+\b/i;
+    // let reg = /(微信|WeChat|Weixin)/i;
+    // let reg = /(微信|WeChat|Weixin)(\ *(号码|账号|帳號|號|号|id)\ *)?(\ *(is|是|:|：|联系)\ *)?([A-Za-z0-9_]+)/i;
+    let reg = /(微信|WeChat|Weixin)\ *(敬)?(请)?(联系|加)?(或电话)?\ *(号码|账号|帳號|號|号|id)?\ *(:|：)*\ *\W{0,6}([a-zA-Z0-9_-])+/i;
+    let ret= msg.match(reg);
+    if (ret) {
+      let matchedStr = ret[0];
+      let index = ret.index;
+      let substr = msg.substr(Math.max(0, index - 20), Math.min(msg.length, index + 30));
+      if (HsyExtractor.debug || true) console.log(`${JSON.stringify({
+        uid: data.uid,
+        zipcode: matchedStr,
+        substr: substr,
+        full: data.content
+      }, null, ' ')}`);
+      return ret[0];
+    }
+    return null;
+  }
   public static extractCity(msg, data) {
+    let chineseCityToEnglish = {
+      "斯坦福": 'Stanford',
+      "阿拉米达": 'Alameda',
+      "山景城": 'Mountain View',
+      '芒廷维尔': 'Mountain View',
+      '芒廷维儿': 'Mountain View',
+      "纳帕": 'Napa',
+      "圣马特奥": 'San Mateo',
+      "纽瓦克": 'Newark',
+      "福斯特城": 'Foster City',
+      "奥克兰": 'Oakland',
+      "贝尔蒙特": 'Belmont',
+      "弗里蒙特": 'Fremont',
+      "圣塔克拉拉": 'Santa Clara',
+      "半月湾": 'Half Moon Bay',
+      "太平洋城": 'Pacifica',
+      "萨拉托加": 'Saratoga',
+      "伯克利": 'Berkeley',
+      "海沃德": 'Hayward',
+      "帕罗奥图": 'Palo Alto',
+      '帕洛阿托': 'Palo Alto',
+      "帕罗奥多": 'Palo Alto',
+      "南三番": 'South San Francisco',
+      "南旧金山": 'South San Francisco',
+      '南三藩': 'South San Francisco',
+      "利弗莫尔": 'Livermore',
+      "桑尼维尔": 'Sunnyvale',
+      '阳谷县': 'Sunnyvale',
+      "红木城": 'Redwood City',
+      "门罗帕克": 'Menlo Park',
+      '门罗公园': 'Menlo Park',
+      "库比蒂诺": 'Cupertino',
+      "苗必达": 'Milpitas',
+      '三番': 'San Francisco',
+      '旧金山': 'San Francisco',
+      '三藩': 'San Francisco',
+      '圣何塞': 'San Jose'
+    };
+
     let cityList = [
+
       'sunnyvale',
       'mountain view',
       'north san jose',
@@ -91,22 +151,26 @@ export class HsyExtractor {
       'santa clara',
       'mtv',
       "Alameda","El Cerrito","Mountain View","San Leandro","Albany","Emeryville","Napa","San Mateo","American Canyon","Fairfax","Newark","San Pablo","Antioch","Fairfield","Novato","San Rafael","Atherton","Foster City","Oakland","San Ramon","Belmont","Fremont","Oakley","Santa Clara","Belvedere","Gilroy","Orinda","Santa Rosa","Benicia","Half Moon Bay","Pacifica","Saratoga","Berkeley","Hayward","Palo Alto","Sausalito","Brentwood","Healdsburg","Petaluma","Sebastopol","Brisbane","Hercules","Piedmont","Sonoma","Burlingame","Hillsborough","Pinole","South San Francisco","Calistoga","Lafayette","Pittsburg","St. Helena","Campbell","Larkspur","Pleasant Hill","Suisun City","Clayton","Livermore","Pleasanton","Sunnyvale","Cloverdale","Los Altos","Portola Valley","Tiburon","Colma","Los Altos Hills","Redwood City","Union City","Concord","Los Gatos","Richmond","Vacaville","Corte Madera","Martinez","Rio Vista","Vallejo","Cotati","Menlo Park","Rohnert Park","Walnut Creek","Cupertino","Mill Valley","Ross","Windsor","Daly City","Millbrae","San Anselmo","Woodside","Danville","Milpitas","San Bruno","Yountville","Dixon","Monte Sereno","San Carlos","Dublin","Moraga","San Francisco","East Palo Alto","Morgan Hill","San Jose", // From http://www.bayareacensus.ca.gov/cities/cities.htm
-      "Stanford", "斯坦福",
-      "阿拉米达","山景城",'芒廷维尔', '芒廷维儿',"纳帕","圣马特奥","纽瓦克","福斯特城","奥克兰","贝尔蒙特","弗里蒙特","圣塔克拉拉","半月湾","太平洋城","萨拉托加","伯克利","海沃德","帕罗奥图", '帕洛阿托', "帕罗奥多","南三番", "南旧金山", '南三藩',"利弗莫尔","桑尼维尔", '阳谷县',"红木城","门罗帕克", '门罗公园',"库比蒂诺","苗必达", '三番', '旧金山', '三藩','圣何塞',
-    ]
+      "Stanford",
+    ].concat(Object.keys(chineseCityToEnglish))
         .map(s => s.toUpperCase());
     let regStr = `(${cityList.join('|')})`;
     let reg = new RegExp(regStr);
-    ;let ret= msg.toUpperCase().match(reg);
+    let ret= msg.toUpperCase().match(reg);
     if (ret) {
       let matchedStr = ret[0];
+      let city = matchedStr;
+      if (chineseCityToEnglish[matchedStr]) {
+        city = chineseCityToEnglish[matchedStr];
+      }
       let index = ret.index;
       let substr = msg.substr(Math.max(0, index - 20), Math.min(msg.length, index + 10));
-      if (HsyExtractor.debug) console.log(`${JSON.stringify({
-        city: matchedStr,
-        substr: substr
-      }, null, ' ')}`);
-      return ret[0];
+      if (HsyExtractor.debug)
+        console.log(`${JSON.stringify({
+          city: city,
+          substr: substr
+        }, null, ' ')}`);
+      return city;
     }
     return null;
   }

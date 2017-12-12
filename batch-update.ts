@@ -57,6 +57,7 @@ async function main() {
     price: 0,
     email: 0,
     fullAddr: 0,
+    wechat: 0
   };
   let imageOnly:HsyListing[] = [];
   let claimed:HsyListing[] = [];
@@ -80,6 +81,7 @@ async function main() {
       let price = HsyExtractor.extractPrice(hsyListing.content, listObj);
       let email = HsyExtractor.extractEmail(hsyListing.content, listObj);
       let phone = HsyExtractor.extractPhone(hsyListing.content, listObj);
+      let wechat = HsyExtractor.extractWeChat(hsyListing.content, listObj);
 
       let dirtyListing = false;
       let dirtyOwner = false;
@@ -112,6 +114,12 @@ async function main() {
       if (hsyListing.owner && email) {
         hsyListing.owner.contactEmail = email;
         updateCount.email++;
+        dirtyOwner = true;
+      }
+
+      if (hsyListing.owner && wechat) {
+        hsyListing.owner.weixin = wechat;
+        updateCount.wechat++;
         dirtyOwner = true;
       }
       if (dirtyListing) listingToUpdate.push(hsyListing);
