@@ -1,6 +1,7 @@
 import {HsyListing} from "./loopbacksdk/models/HsyListing";
 import {HsyUser} from "./loopbacksdk/models/HsyUser";
 import {HsyExtractor} from "./extractor";
+import {GeoPoint} from "./loopbacksdk/models/BaseModels";
 // haoshiyou-server-dev.herokuapp.com
 let config = {
   "loopback": {
@@ -37,7 +38,7 @@ async function main() {
               // },
               // content: '%招租，详情见图片'
             },
-            limit: 3000,
+            // limit: 500,
             include: ["owner"]
           }
       })
@@ -57,7 +58,8 @@ async function main() {
     price: 0,
     email: 0,
     fullAddr: 0,
-    wechat: 0
+    wechat: 0,
+    location: 0,
   };
   let imageOnly:HsyListing[] = [];
   let claimed:HsyListing[] = [];
@@ -126,6 +128,21 @@ async function main() {
       if (dirtyOwner) ownerToUpdate.push(hsyListing.owner);
     }
   });
+  let iii = 0;
+  for (let listing of listingToUpdate) {
+    if (listing.addressLine || listing.addressCity || listing.addressZipcode) {
+      let georaw = await HsyExtractor.maybeExtractGeoPoint(
+          listing.addressLine,
+          listing.addressCity,
+          listing.addressZipcode
+      );
+      let geopoint = <GeoPoint>georaw;
+      listing.location = geopoint;
+      updateCount.location++;
+      console.log(`Updated location ${updateCount.location}, at ${iii} of ${listingToUpdate.length}`);
+    }
+    iii++;
+  }
 
   console.log(`Total: ${result[0].body.length}
   Listing To Update: ${listingToUpdate.length}
@@ -135,6 +152,8 @@ async function main() {
   Image Only: ${imageOnly.length},
   Detailed count: 
   ${JSON.stringify(updateCount, null, '  ')}`);
+
+
   if (realRun) {
     console.log(`Warning: real update!`);
     let success = 0;
