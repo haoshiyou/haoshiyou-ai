@@ -204,33 +204,19 @@ export class HsyExtractor {
   }
   public static async maybeExtractGeoPoint(fullAddr, zipcode, city):Promise<object> {
     let addToQuery = firstNotNull(fullAddr, zipcode, city);
-    // console.log('XXX maybeExtractGeoPoint 2');
     if (!addToQuery) return null;
-    // console.log('XXX maybeExtractGeoPoint 3');
-    // Geocode an address.
     return new Promise((resolve, reject) => {
-      // console.log('XXX maybeExtractGeoPoint 4');
       googleMapsClient.geocode({
         address: firstNotNull(fullAddr, zipcode, city)
       }, (err, response) => {
-        // console.log('XXX maybeExtractGeoPoint 5');
         if (!err) {
-          // console.log('XXX maybeExtractGeoPoint 6');
           let lat = response.json.results[0].geometry.location.lat;
           let lng = response.json.results[0].geometry.location.lng;
-          // console.log('XXX maybeExtractGeoPoint 7');
-          // console.log(`${JSON.stringify(response.json.results[0].geometry, null, '  ')}`);
-
-          // console.log('XXX maybeExtractGeoPoint 8');
-          // console.log(`Got response! lat=${lat}, lng=${lng}`);
           resolve({lat: lat, lng: lng});
         } else {
-          // console.log('XXX maybeExtractGeoPoint 7');
-          // console.log('ERROR in geo!');
           console.log(err);
           reject(err);
         }
-        // console.log('XXX maybeExtractGeoPoint 8');
       });
     });
 

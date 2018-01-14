@@ -138,6 +138,8 @@ async function main() {
       );
       let geopoint = <GeoPoint>georaw;
       listing.location = geopoint;
+      listing.location_lat = geopoint.lat;
+      listing.location_lng = geopoint.lng;
       updateCount.location++;
       console.log(`Updated location ${updateCount.location}, at ${iii} of ${listingToUpdate.length}`);
     }
