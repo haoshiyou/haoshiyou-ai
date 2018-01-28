@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "dependencies": {
     "@google-cloud/pubsub": "^0.16.0",
+    "@google/maps": "^0.4.5",
     "@purest/providers": "^1.0.1",
     "@types/csv-parse": "^1.1.11",
     "bluebird": "^3.5.1",

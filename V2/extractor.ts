@@ -9,7 +9,7 @@ function firstNotNull(a, b, c) {
 }
 export class HsyExtractor {
 
-  private static debug:boolean = false;
+  private static __DEBUG__:boolean = false;
 
   public static extractPrice(msg:string, data):any {
     // Not a phone number
@@ -17,20 +17,66 @@ export class HsyExtractor {
     // Not a year number, not near 年
     // Not in a URL
     // Range needs to be between 500 - 6000
-    // Near ["USD", "$", "租金", "房租", "一个月", "每月", "/月"]
-    let regFallBack = /\b\d{3,4}\b/;
-    let ret = msg.match(regFallBack);
-    if (ret) {
-      let matchedStr = ret[0];
-      let index = ret.index;
-      let substr = msg.substr(Math.max(0, index - 10), Math.min(msg.length, index + 10));
-      if (HsyExtractor.debug) console.log(`${JSON.stringify({
-        price: matchedStr,
-        substr: substr
-      }, null, ' ')}`);
-      return ret[0];
+    // Not Near ["ddd-ddd-dddd", "ddddd"]
+    let regFallBack = /(\d,\d{3})|(\d{4})|(!\d{5})/g;
+    let numbers = msg.match(regFallBack);
+    let priorities = Array.from(Array(numbers.length), () => 0)
+    if (HsyExtractor.__DEBUG__) {
+      console.log(`${JSON.stringify(numbers)}`);
+    }
+    if (numbers) {
+      for (var i = 0; i < numbers.length; i++) {
+        let number = numbers[i];
+        let index = msg.indexOf(number);
+        let tailIndex = index + number.length;
+
+        let veryAfterThese = new Array("$");
+        for (let one of veryAfterThese) {
+          if (msg.lastIndexOf(one, index) != -1 && (index - msg.lastIndexOf(one, index)) <= 3) {
+            priorities[i] += 1000;
+          }
+        }
+        let afterThese = new Array("USD", "租", "金", "价格", "月");
+        for (let one of afterThese) {
+          if (msg.lastIndexOf(one, index) != -1 && (index - msg.lastIndexOf(one, index)) <= 5) {
+            priorities[i] += 100;
+          }
+        }
+        let veryBeforeThese = new Array("刀", "元", "USD", "月", "month");
+        for (let one of veryBeforeThese) {
+          if (msg.indexOf(one, tailIndex) != -1 && (msg.indexOf(one, tailIndex) - tailIndex) <= 3) {
+            priorities[i] += 1000;
+          }
+        }
+
+        let substr = msg.substr(Math.max(0, index - 10), Math.min(msg.length, index + 10));
+        if (HsyExtractor.__DEBUG__) {
+          console.log(`${JSON.stringify({
+              price: number,
+              substr: substr
+              }, null, ' ')}`
+          );
+        }
+      }
+      return this.pickMaximumPriority(numbers, priorities);
     }
     return null;
+  }
+
+  private static pickMaximumPriority(matches:Array, priorities:Array):any {
+    if (HsyExtractor.__DEBUG__) {
+        console.log(" --- matches: ", matches);
+        console.log(" --- priorities: ", priorities);
+    }
+    let pick = 0;
+    let max = priorities[0];
+    for (var i = 1; i < priorities.length; i++) {
+      if (priorities[i] > max) {
+        pick = i;
+        max = priorities[i];
+      }
+    }
+    return matches[pick];
   }
 
   public static extractPhone(msg, data) {
@@ -41,7 +87,7 @@ export class HsyExtractor {
       let matchedStr = ret[0];
       let index = ret.index;
       let substr = msg.substr(Math.max(0, index - 20), Math.min(msg.length, index + 10));
-      if (HsyExtractor.debug) console.log(`${JSON.stringify({
+      if (HsyExtractor.__DEBUG__) console.log(`${JSON.stringify({
         phone: matchedStr,
         substr: substr
       }, null, ' ')}`);
@@ -58,7 +104,7 @@ export class HsyExtractor {
       let matchedStr = ret[0];
       let index = ret.index;
       let substr = msg.substr(Math.max(0, index - 20), Math.min(msg.length, index + 10));
-      if (HsyExtractor.debug) console.log(`${JSON.stringify({
+      if (HsyExtractor.__DEBUG__) console.log(`${JSON.stringify({
         email: matchedStr,
         substr: substr
       }, null, ' ')}`);
@@ -74,7 +120,7 @@ export class HsyExtractor {
       let matchedStr = ret[0];
       let index = ret.index;
       let substr = msg.substr(Math.max(0, index - 20), Math.min(msg.length, index + 10));
-      if (HsyExtractor.debug) console.log(`${JSON.stringify({
+      if (HsyExtractor.__DEBUG__) console.log(`${JSON.stringify({
         zipcode: matchedStr,
         substr: substr
       }, null, ' ')}`);
@@ -96,7 +142,7 @@ export class HsyExtractor {
       let matchedStr = secondRet[0];
       let index = firstRet.index;
       let substr = msg.substr(Math.max(0, index - 20), Math.min(msg.length, index + 60));
-      if (HsyExtractor.debug || true) console.log(`${JSON.stringify({
+      if (HsyExtractor.__DEBUG__ || true) console.log(`${JSON.stringify({
         firstRet: firstRet[0],
         wechat: matchedStr,
         substr: substr,
@@ -177,7 +223,7 @@ export class HsyExtractor {
       }
       let index = ret.index;
       let substr = msg.substr(Math.max(0, index - 20), Math.min(msg.length, index + 10));
-      if (HsyExtractor.debug)
+      if (HsyExtractor.__DEBUG__)
         console.log(`${JSON.stringify({
           city: city,
           substr: substr
@@ -195,7 +241,7 @@ export class HsyExtractor {
       let matchedStr = ret[0];
       let index = ret.index;
       let substr = msg.substr(Math.max(0, index - 20), Math.min(msg.length, index + 10));
-      if (HsyExtractor.debug) console.log(`${JSON.stringify({
+      if (HsyExtractor.__DEBUG__) console.log(`${JSON.stringify({
         addr: matchedStr,
         substr: substr
       }, null, ' ')}`);
