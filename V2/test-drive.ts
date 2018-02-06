@@ -22,17 +22,39 @@ function loopScanDirectory(directoryPath:String) {
 function main(msg:String) {
     console.log(" --- argv: ", process.argv);
     console.log(" --- START --- ");
-    var filename = process.argv[2]; // 输入参数必须用 单引号''包起来, 否则可能出现转义错误
 
-    for (var i = 1; i <= 2; i++) {
-        fs.readFile(filename + i, 'utf8', (error, data) => {
-            let ret = HsyExtractor.extractPrice(data);
-            if (ret){
-              console.log(`Price: ${ret}`);
+    var output_filename = "../output/output_" + new Date().toISOString() + ".csv";
+    var content = "case_name,real_price,price" + "\n";
+
+    var csv_data = fs.readFileSync('../output/template.csv');
+    var line = 0;
+    var promise = csv(csv_data, {
+              raw: false,     // do not decode to utf-8 strings
+              separator: ',', // specify optional cell separator
+              quote: '"',     // specify optional quote character
+              escape: '\\',   // specify optional escape character (defaults to quote value)
+              newline: '\n',  // specify a newline character
             }
+        )
+        .on('data', (row) => {
+            if (line > 0) {
+                let case_filename = row[0];
+                let case_data = fs.readFileSync("../testdata/" + case_filename, 'utf8');
+                let price = HsyExtractor.extractPrice(case_data);
+                if (price) {
+                    console.log(`Price: ${price}`);
+                    row[11] = price;
+                }
+            }
+            content += row + "\n";
+            line++;
+        })
+        .on('end', () => {
+            console.log("output: " + output_filename);
+            console.log("content: " + content);
+            //fs.writeFileSync(output_filename, content, "utf-8");
+            console.log(" --- STOP --- ");
         });
-    }
-    console.log(" --- STOP --- ");
 }
 
 main();
