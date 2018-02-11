@@ -9,7 +9,7 @@ function firstNotNull(a, b, c) {
 }
 export class HsyExtractor {
 
-  private static __DEBUG__:boolean = true;
+  private static __DEBUG__:boolean = false;
 
   private static pickMaximumPriority(matches:Array, priorities:Array):any {
     if (HsyExtractor.__DEBUG__) {
@@ -27,9 +27,22 @@ export class HsyExtractor {
     return matches[pick];
   }
 
-  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ PRICE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ TITLE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
+  // 第一个非空行
+  // 不小于10个char
+  // 不大于70个char
   public static extractTitle(msg:string, data):any {
+    let startIndex = 0;
+    let endIndex = msg.indexOf("\n");
+    while (endIndex != - 1) {
+        let line = msg.substring(startIndex, endIndex).trim();
+        if (line.length >= 10) {
+            return line.length > 70 ? line.substring(0, 70) : line;
+        }
+        startIndex = endIndex + 1;
+        endIndex = msg.indexOf('\n', startIndex);
+    }
     return '____';
   }
 
@@ -133,7 +146,9 @@ export class HsyExtractor {
   public static extractZipcode(msg, data) {
     let reg = /\b9[4,5]\d{3}\b/g;
     let numbers = msg.match(reg);
-    console.log('numbers: ', numbers);
+    if (HsyExtractor.__DEBUG__) {
+        console.log('numbers: ', numbers);
+    }
     let priorities = Array.from(Array(numbers.length), () => 0);
     if (HsyExtractor.__DEBUG__) {
       console.log(`${JSON.stringify(numbers)}`);
@@ -185,7 +200,7 @@ export class HsyExtractor {
       let matchedStr = secondRet[0];
       let index = firstRet.index;
       let substr = msg.substr(Math.max(0, index - 20), Math.min(msg.length, index + 60));
-      if (HsyExtractor.__DEBUG__ || true) console.log(`${JSON.stringify({
+      if (HsyExtractor.__DEBUG__) console.log(`${JSON.stringify({
         firstRet: firstRet[0],
         wechat: matchedStr,
         substr: substr,

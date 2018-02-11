@@ -5,6 +5,8 @@ function loadInput(input:String) {
     console.log('price: ', price);
     var zipcode = HsyExtractor.extractZipcode(input);
     console.log('zipcode: ', zipcode);
+    var title = HsyExtractor.extractTitle(input);
+    console.log('title: ', title);
 }
 
 /*
