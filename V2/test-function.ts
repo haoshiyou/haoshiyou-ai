@@ -2,7 +2,9 @@ import {HsyExtractor} from "./extractor";
 
 function loadInput(input:String) {
     var price = HsyExtractor.extractPrice(input);
-    return price;
+    console.log('price: ', price);
+    var zipcode = HsyExtractor.extractZipcode(input);
+    console.log('zipcode: ', zipcode);
 }
 
 /*
@@ -14,8 +16,7 @@ function main(msg:String) {
     console.log(" --- argv: ", process.argv);
     var msg = process.argv[2]; // 输入参数必须用 单引号''包起来, 否则可能出现转义错误
 
-    var price = loadInput(msg);
-    console.log('price: ', price);
+    loadInput(msg);
 
     console.log(" --- STOP --- ");
 }

@@ -47,9 +47,18 @@ function main(msg:String) {
                 if (price) {
                     row[11] = price;
                 }
-                if (price == row[10]) {
+                if (row[11] == row[10]) {
                     correct_count++;
                 }
+
+                let zipcode = HsyExtractor.extractZipcode(case_data);
+                if (zipcode) {
+                    row[5] = zipcode;
+                }
+                if (row[5] == row[4]) {
+                    correct_count++;
+                }
+
                 row[1] = correct_count;
             }
             content += row + "\n";
