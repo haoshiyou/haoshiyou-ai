@@ -23,28 +23,34 @@ function main(msg:String) {
     console.log(" --- argv: ", process.argv);
     console.log(" --- START --- ");
 
-    var output_filename = "../output/output_" + new Date().toISOString() + ".csv";
-    var content = "case_name,real_price,price" + "\n";
+    var output_filename = "../output/output_" + formatDate(new Date())+ ".csv";
+    var content = "";
 
-    var csv_data = fs.readFileSync('../output/template.csv');
+    var csv_data = fs.readFileSync('../input/testdata.csv');
     var line = 0;
     var promise = csv(csv_data, {
               raw: false,     // do not decode to utf-8 strings
               separator: ',', // specify optional cell separator
               quote: '"',     // specify optional quote character
-              escape: '\\',   // specify optional escape character (defaults to quote value)
+              escape: '"',   // specify optional escape character (defaults to quote value)
               newline: '\n',  // specify a newline character
+              relax: true,
             }
         )
         .on('data', (row) => {
+            console.log("row: " + row);
             if (line > 0) {
                 let case_filename = row[0];
                 let case_data = fs.readFileSync("../testdata/" + case_filename, 'utf8');
+                let correct_count = 0;
                 let price = HsyExtractor.extractPrice(case_data);
                 if (price) {
-                    console.log(`Price: ${price}`);
                     row[11] = price;
                 }
+                if (price == row[10]) {
+                    correct_count++;
+                }
+                row[1] = correct_count;
             }
             content += row + "\n";
             line++;
@@ -52,9 +58,19 @@ function main(msg:String) {
         .on('end', () => {
             console.log("output: " + output_filename);
             console.log("content: " + content);
-            //fs.writeFileSync(output_filename, content, "utf-8");
+            fs.writeFileSync(output_filename, content, "utf-8");
             console.log(" --- STOP --- ");
         });
+}
+
+function formatDate(date) {
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
+    var hour = date.getHours();
+    var minute = date.getMinutes();
+    var second = date.getSeconds();
+    return year + '-' + month + '-' + day + '-' + hour + '-' + minute + '-' + second;
 }
 
 main();
