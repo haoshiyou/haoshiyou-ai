@@ -1,4 +1,8 @@
-case_name,correct_count,real_phone,phone,real_zip,zip,real_address,address,real_wechat_name,wechat_name,real_price,price
-case_0,0,201-519-0732,____,94089,____,"1220 N Fair Oaks Ave, Apt 1307, Sunnyvale, CA 94089",____,"\ride 吃面",____,1550,____
-case_1,0,____,____,95040,____,"Santa Clara 95054",____,____,____,1100,____
-case_2,0,669-224-8173,____,95131,____,"North San Jose 9513",____,cyl329761180,____,1300,____
+case_name,correct_count,title,real_phone,phone,real_zip,zip,real_address,address,real_wechat_name,wechat_name,real_price,price
+case_0,0,____,201-519-0732,____,94089,____,"1220 N Fair Oaks Ave, Apt 1307, Sunnyvale, CA 94089",____,"\ride 吃面",____,1550,____
+case_1,0,____,____,____,95054,____,"Santa Clara 95054",____,____,____,1100,____
+case_2,0,____,669-224-8173,____,95131,____,"North San Jose 9513",____,cyl329761180,____,1300,____
+case_11,0,____,____,____,95054,____,"Santa Clara 95054",____,____,____,1100,____
+case_12,0,____,669-224-8173,____,95131,____,"North San Jose 9513",____,cyl329761180,____,1300,____
+
+
