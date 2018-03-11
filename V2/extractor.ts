@@ -10,6 +10,7 @@ function firstNotNull(a, b, c) {
 export class HsyExtractor {
 
   private static __DEBUG__:boolean = false;
+  private static YEAR:number = 2018;
 
   private static pickMaximumPriority(matches:Array, priorities:Array):any {
     if (HsyExtractor.__DEBUG__) {
@@ -55,8 +56,11 @@ export class HsyExtractor {
     // Not in a URL
     // Range needs to be between 500 - 6000
     // Not Near ["ddd-ddd-dddd", "ddddd"]
-    let regFallBack = /(\d,\d{3})|(\d{4})|(!\d{5})/g;
+    let regFallBack = /(\b\d,\d{3}\b)|(\b\d{3,4}\b)/g;
     let numbers = msg.match(regFallBack);
+    if (numbers == null) {
+        return '____';
+    }
     let priorities = Array.from(Array(numbers.length), () => 0)
     if (HsyExtractor.__DEBUG__) {
       console.log(`${JSON.stringify(numbers)}`);
@@ -95,7 +99,8 @@ export class HsyExtractor {
           );
         }
       }
-      return this.pickMaximumPriority(numbers, priorities);
+      let price = this.pickMaximumPriority(numbers, priorities);
+      return price == HsyExtractor.YEAR ? '____' : price;
     }
     return null;
   }
@@ -104,8 +109,11 @@ export class HsyExtractor {
 
   public static extractPhone(msg, data) {
     // Not part of a URL (espectially not in a Craigslist URL)
-    let reg = /\b\d{3}[-\ ]?\d{3}[-\ ]?\d{4}\b/;
+    let reg = /\b\d{3}[-\ ]?\d{3}[-\ ]?\d{4}\b/g;
     let ret= msg.match(reg);
+    if (HsyExtractor.__DEBUG__) {
+      console.log(' --- phones: ', ret);
+    }
     if (ret) {
       let matchedStr = ret[0];
       let index = ret.index;
@@ -123,8 +131,11 @@ export class HsyExtractor {
 
   public static extractEmail(msg, data) {
     // https://www.regular-expressions.info/email.html
-    let reg = /([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)/;
+    let reg = /([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)/g;
     let ret= msg.match(reg);
+    if (HsyExtractor.__DEBUG__) {
+      console.log(' --- email: ', ret);
+    }
     if (ret) {
       let matchedStr = ret[0];
       let index = ret.index;
@@ -148,6 +159,9 @@ export class HsyExtractor {
     let numbers = msg.match(reg);
     if (HsyExtractor.__DEBUG__) {
         console.log('numbers: ', numbers);
+    }
+    if (numbers == null) {
+        return "____";
     }
     let priorities = Array.from(Array(numbers.length), () => 0);
     if (HsyExtractor.__DEBUG__) {

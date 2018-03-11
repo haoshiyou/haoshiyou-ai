@@ -38,23 +38,39 @@ function main(msg:String) {
             }
         )
         .on('data', (row) => {
-            if (line > 0) {
+        if (line > 0 && row[0].length > 0) {
                 let case_filename = row[0];
                 let case_data = fs.readFileSync("../testdata/" + case_filename, 'utf8');
                 let correct_count = 0;
                 let price = HsyExtractor.extractPrice(case_data);
                 if (price) {
-                    row[12] = price;
+                    row[14] = price;
                 }
-                if (row[12] == row[11]) {
+                if (row[14] == row[13]) {
                     correct_count++;
                 }
 
                 let zipcode = HsyExtractor.extractZipcode(case_data);
                 if (zipcode) {
-                    row[6] = zipcode;
+                    row[4] = zipcode;
                 }
-                if (row[6] == row[5]) {
+                if (row[4] == row[3]) {
+                    correct_count++;
+                }
+
+                let phone = HsyExtractor.extractPhone(case_data);
+                if (phone) {
+                    row[8] = phone;
+                }
+                if (row[8] == row[7]) {
+                    correct_count++;
+                }
+
+                let email = HsyExtractor.extractEmail(case_data);
+                if (email) {
+                    row[10] = email;
+                }
+                if (row[10] == row[9]) {
                     correct_count++;
                 }
 

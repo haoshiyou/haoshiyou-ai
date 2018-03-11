@@ -13,3 +13,7 @@ ts-node test-batch-drive.ts
  * then fetches each test case from "../testdata/<filename>",
  * applies the rules to fetch the attributes of that test case.
  */
+
+## Bugs
+1. when price not provided, any number can be a price in result;
+
