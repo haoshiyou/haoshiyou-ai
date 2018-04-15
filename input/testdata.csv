@@ -1,0 +1,16 @@
+case_name,correct_count,title,real_zip,zip,real_address,address,real_phone,phone,real_email,email,real_wechat_name,wechat_name,real_price,price
+case_0,0,____,94089,____,"1220 N Fair Oaks Ave, Apt 1307, Sunnyvale, CA 94089",____,201-519-0000,____,____,____,\ride 吃面,____,1550,____
+case_1,0,____,95054,____,Santa Clara 95054,____,____,____,____,____,____,____,1100,____
+case_2,0,____,95131,____,North San Jose 9513,____,669-224-8173,____,____,____,cyl329761180,____,1300,____
+case_11,0,____,95054,____,Santa Clara 95054,____,____,____,____,____,____,____,1100,____
+case_12,0,____,95131,____,North San Jose 9513,____,669-224-8173,____,____,____,cyl329761180,____,1300,____
+case_15,0,Spacious 2B2B Townhome in North Sunnyvale 94085,94085,____,North Sunnyvale,____,____,____,____,____,____,____,____,____
+case_16,0,"Santa Clara 95054全新装修的卧室带独立卫生间$1100",95054,____,Santa Clara 95054,____,____,____,____,____,____,____,1100,____
+case_18,0,"San Jose 2B2B 转租其中一间，最后两个月打折租1100",95134,____,"Enclave Apartment, 4345 Renaissance Dr, San Jose, CA 95134",____,____,____,____,____,____,____,1100,____
+case_20,0,"全新Townhouse 出租 [Newark, CA] 4 房 4 卫 2 车库",____,____,"Newark, CA",____,____,____,____,____,____,____,____,____
+case_22,0,[MTV短租]，独立卫浴，12/09起-12/30，$800刀包全部,____,____,____,____,____,____,____,____,九九100九八九四,____,800,____
+case_24,0,"招租 北San Jose 独卫客卧 另提供月租车",95131,____,https://goo.gl/maps/akr7bH66DSE2,____,____,____,youngercool@gmail.com,____,280358992,____,____,____
+case_25,0,"santa clara 2b1b招男室友",____,____,____,____,____,____,____,____,____,____,1100,1100
+case_28,0,"Sunnyvale 94089 精装独栋3B2B中的客房1月中旬起",94089,____,____,____,____,____,____,____,zhouditty-us,____,1450,____
+case_29,0,"转租santa clara 1b1b公寓",95051,____,"Halford Gardens Apartments, Santa Calra",____,____,____,lixishqwsa@yahoo.com,____,____,____,2345,____
+case_37,0,"近 Balboa Park Bart Park 地铁站",____,____,"近 Balboa Park Bart Park 地铁站",____,415 237 3388,____,____,____,sing3683388,____,____,____
