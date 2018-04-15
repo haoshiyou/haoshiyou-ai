@@ -1,0 +1,7 @@
+# How these test data is generate?
+
+Split the prod-snapshot.csv into files named case_XXX (XXX is [10, 100]),
+by script split_test_cases.js
+
+Contact <Renjie> before you are going to run the script again or change the prod-snapshot.csv.
+Since the test mapping file in '../input/testdata.csv' is related with generated case_XXX.
