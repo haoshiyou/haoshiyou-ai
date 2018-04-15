@@ -42,12 +42,10 @@ function main(msg:String) {
                 let case_filename = row[0];
                 let case_data = fs.readFileSync("../testdata/" + case_filename, 'utf8');
                 let correct_count = 0;
-                let price = HsyExtractor.extractPrice(case_data);
-                if (price) {
-                    row[14] = price;
-                }
-                if (row[14] == row[13]) {
-                    correct_count++;
+
+                let title = HsyExtractor.extractTitle(case_data);
+                if (title) {
+                    row[2] = '"' + title + '"';
                 }
 
                 let zipcode = HsyExtractor.extractZipcode(case_data);
@@ -58,25 +56,32 @@ function main(msg:String) {
                     correct_count++;
                 }
 
+                let addr = HsyExtractor.extractFullAddr(case_data);
+                row[7] = '"' + row[7] + '"';
+                console.log(' --- case %s addr: %s', case_filename, addr);
+
                 let phone = HsyExtractor.extractPhone(case_data);
                 if (phone) {
-                    row[8] = phone;
-                }
-                if (row[8] == row[7]) {
-                    correct_count++;
-                }
-
-                let email = HsyExtractor.extractEmail(case_data);
-                if (email) {
-                    row[10] = email;
+                    row[10] = phone;
                 }
                 if (row[10] == row[9]) {
                     correct_count++;
                 }
 
-                let title = HsyExtractor.extractTitle(case_data);
-                if (title) {
-                    row[2] = '"' + title + '"';
+                let email = HsyExtractor.extractEmail(case_data);
+                if (email) {
+                    row[12] = email;
+                }
+                if (row[12] == row[11]) {
+                    correct_count++;
+                }
+
+                let price = HsyExtractor.extractPrice(case_data);
+                if (price) {
+                    row[16] = price;
+                }
+                if (row[16] == row[15]) {
+                    correct_count++;
                 }
 
                 row[1] = correct_count;
