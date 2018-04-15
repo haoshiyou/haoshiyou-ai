@@ -1,24 +1,16 @@
-import {HsyExtractor} from "./extractor";
+import {HsyExtractor as HsyExtractorV2} from "../V2/extractor";
+import {HsyExtractor as HsyExtractorV1} from "../extractor";
 
 let csv = require('csv-parse');
 let fs = require('fs');
 let path = require('path');
-
-// List all files in a directory in Node.js recursively in a synchronous fashion
-function loopScanDirectory(directoryPath:String) {
-    var files = fs.readdirSync(dir);
-    filelist = filelist || [];
-    files.forEach(function(file) {
-        if (fs.statSync(path.join(dir, file)).isDirectory()) {
-            filelist = walkSync(path.join(dir, file), filelist);
-        }
-        else {
-            filelist.push(path.join(dir, file));
-        }
-    });
-    return filelist;
+let useV2 = true;
+let HsyExtractor;
+if (useV2) {
+  HsyExtractor = HsyExtractorV2;
+} else {
+  HsyExtractor = HsyExtractorV1;
 }
-
 function main(msg:String) {
     console.log(" --- argv: ", process.argv);
     console.log(" --- START --- ");
