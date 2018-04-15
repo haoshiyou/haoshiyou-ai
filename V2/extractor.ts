@@ -226,6 +226,7 @@ export class HsyExtractor {
 
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ LOCATION ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
+  // if ZIPCODE is provided, not extract CITY
   public static extractCity(msg, data) {
     let chineseCityToEnglish = {
       "斯坦福": 'Stanford',
@@ -307,9 +308,27 @@ export class HsyExtractor {
     return null;
   }
 
+  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ADDRESS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
   public static extractFullAddr(msg, data) {
     // In address form
-    let reg = /\d+.+(?=AL|AK|AS|AZ|AR|CA|CO|CT|DE|DC|FM|FL|GA|GU|HI|ID|IL|IN|IA|KS|KY|LA|ME|MH|MD|MA|MI|MN|MS|MO|MT|NE|NV|NH|NJ|NM|NY|NC|ND|MP|OH|OK|OR|PW|PA|PR|RI|SC|SD|TN|TX|UT|VT|VI|VA|WA|WV|WI|WY)[A-Z]{2}[, ]+\d{5}(?:-\d{4})?/;
+    let reg = /\d+.+(?=CA)[A-Z]{2}[, ]+\d{5}(?:-\d{4})?/;
+    let ret= msg.toUpperCase().match(reg);
+    if (ret) {
+      let matchedStr = ret[0];
+      let index = ret.index;
+      let substr = msg.substr(Math.max(0, index - 20), Math.min(msg.length, index + 10));
+      if (HsyExtractor.__DEBUG__) console.log(`${JSON.stringify({
+        addr: matchedStr,
+        substr: substr
+      }, null, ' ')}`);
+      return ret[0];
+    }
+    return null;
+  }
+
+  private static findAddrByCaliforniaAndZip(msg, data) {
+    let reg = /\d+.+(?=CA|California)[A-Z]{2}[, ]+\d{5}(?:-\d{4})?/;
     let ret= msg.toUpperCase().match(reg);
     if (ret) {
       let matchedStr = ret[0];
