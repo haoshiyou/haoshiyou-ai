@@ -11,6 +11,12 @@ export class HsyExtractor {
 
   private static debug:boolean = false;
 
+  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ TITLE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+  public static extractTitle(msg:string, data):any {
+    // Unimplemented intentionally
+    return '____';
+  }
+
   public static extractPrice(msg:string, data):any {
     // Not a phone number
     // Not a street number
