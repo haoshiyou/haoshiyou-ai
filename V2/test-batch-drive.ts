@@ -30,9 +30,12 @@ function main(msg:String) {
             }
         )
         .on('data', (row) => {
-        if (line > 0 && row[0].length > 0) {
+            if (line > 0 && row[0].length > 0) {
                 let case_filename = row[0];
                 let case_data = fs.readFileSync("../testdata/" + case_filename, 'utf8');
+                // pre-process
+                case_data = preProcess(case_data);
+
                 let correct_count = 0;
 
                 let title = HsyExtractor.extractTitle(case_data);
@@ -48,9 +51,20 @@ function main(msg:String) {
                     correct_count++;
                 }
 
-                let addr = HsyExtractor.extractFullAddr(case_data);
+                let city = HsyExtractor.extractCity(case_data);
+                row[6] = city;
+                if (row[6] == row[5]) {
+                    correct_count++;
+                }
+
+                let fullAddr = HsyExtractor.findAddress(case_data);
                 row[7] = '"' + row[7] + '"';
-                console.log(' --- case %s addr: %s', case_filename, addr);
+                if (fullAddr) {
+                    row[8] = '"' + fullAddr + '"';
+                }
+                if (row[8] == row[7]) {
+                    correct_count++;
+                }
 
                 let phone = HsyExtractor.extractPhone(case_data);
                 if (phone) {
@@ -87,6 +101,11 @@ function main(msg:String) {
             fs.writeFileSync(output_filename, content, "utf-8");
             console.log(" --- STOP --- ");
         });
+}
+
+function preProcess(data:String) {
+    // id: 54f22135-f6c7-4350-80d9-9f7caf0481b8
+    return data.replace(/id: [0-9a-z]{8}(-[0-9a-z]{4}){3}-[0-9a-z]{12}\n/g, "");
 }
 
 function formatDate(date) {
