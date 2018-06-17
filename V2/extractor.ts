@@ -117,7 +117,7 @@ export class HsyExtractor {
         }
       }
       let price = this.pickMaximumPriority(numbers, priorities);
-      return price == HsyExtractor.YEAR ? '____' : price;
+      return price == HsyExtractor.YEAR ? '____' : price.replace(',','');
     }
     return null;
   }

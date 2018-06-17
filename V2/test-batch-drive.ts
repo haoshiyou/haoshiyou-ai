@@ -6,11 +6,13 @@ let fs = require('fs');
 let path = require('path');
 let useV2 = true;
 let HsyExtractor;
+
 if (useV2) {
   HsyExtractor = HsyExtractorV2;
 } else {
   HsyExtractor = HsyExtractorV1;
 }
+
 function main(msg:String) {
     console.log(" --- argv: ", process.argv);
     console.log(" --- START --- ");
@@ -32,7 +34,12 @@ function main(msg:String) {
         .on('data', (row) => {
             if (line > 0 && row[0].length > 0) {
                 let case_filename = row[0];
-                let case_data = fs.readFileSync("../testdata/" + case_filename, 'utf8');
+                let case_data = null;
+                try {
+                    case_data = fs.readFileSync("../testdata/" + case_filename, 'utf8');
+                } catch (err) {
+                    return;
+                }
                 // pre-process
                 case_data = preProcess(case_data);
 
@@ -119,3 +126,4 @@ function formatDate(date) {
 }
 
 main();
+
