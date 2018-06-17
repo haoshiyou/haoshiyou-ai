@@ -49,14 +49,28 @@ export class HsyExtractor {
 
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ PRICE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
+  private static getOnlyDigitis(matched:string):any {
+    let st = 0;
+    let ed = matched.length - 1;
+    while (matched.charAt(st) < '0' || matched.charAt(st) > '9') {
+        st++;
+    }
+    while (matched.charAt(ed) < '0' || matched.charAt(ed) > '9') {
+        ed--;
+    }
+    return matched.substr(st, ed);
+  }
+
   public static extractPrice(msg:string, data):any {
     // Not a phone number
+    let phoneStr = this.extractPhone(msg);
+    console.log(' --- phoneStr: ', phoneStr);
     // Not a street number
     // Not a year number, not near 年
     // Not in a URL
     // Range needs to be between 500 - 6000
     // Not Near ["ddd-ddd-dddd", "ddddd"]
-    let regFallBack = /(\b\d,\d{3}\b)|(\b\d{3,4}\b)/g;
+    let regFallBack = /([^\d][1-9]{1},\d{3}[^\d])|([^\d][1-9]{1}\d{2,3}[^\d])/g;
     let numbers = msg.match(regFallBack);
     if (numbers == null) {
         return '____';
@@ -67,6 +81,7 @@ export class HsyExtractor {
     }
     if (numbers) {
       for (var i = 0; i < numbers.length; i++) {
+        numbers[i] = this.getOnlyDigitis(numbers[i]);
         let number = numbers[i];
         let index = msg.indexOf(number);
         let tailIndex = index + number.length;
@@ -100,9 +115,10 @@ export class HsyExtractor {
                 priorities[i] -= 10000;
             }
         }
-        let excludeAfter = new Array('东','南','西','北','上','下');
+        let excludeAfter = new Array('东','南','西','北','上','下','尺','高');
         for (let one of excludeAfter) {
-            if (tailIndex < msg.length - 1 && excludePrice.includes(number) && msg.charAt(tailIndex + 1) == one) {
+            let oneIndex = msg.indexOf(one, tailIndex);
+            if (tailIndex + 1 < msg.length && oneIndex != -1 && oneIndex < tailIndex + 2) {
                 priorities[i] -= 10000;
             }
         }
@@ -110,10 +126,24 @@ export class HsyExtractor {
         if (HsyExtractor.__DEBUG__) {
           let substr = msg.substr(Math.max(0, index - 10), Math.min(msg.length, index + 10));
           console.log(`${JSON.stringify({
-              price: number,
-              substr: substr
-              }, null, ' ')}`
-          );
+            price: number,
+            substr: substr
+          }, null, ' ')}`);
+        }
+
+        // not a phone number
+        if (phoneStr != null &&
+            msg.indexOf(phoneStr) <= index &&
+            msg.indexOf(phoneStr) + phoneStr.length >= tailIndex) {
+            priorities[i] -= 10000;
+        }
+
+        // not a digit before or after
+        if (index > 0 && msg.charAt(index - 1) >= '0' && msg.charAt(index - 1) <= '9') {
+            priorities[i] -= 10000;
+        }
+        if (tailIndex < msg.length - 1 && msg.charAt(tailIndex + 1) >= '0' && msg.charAt(tailIndex + 1) <= '9') {
+            priorities[i] -= 10000;
         }
       }
       let price = this.pickMaximumPriority(numbers, priorities);
