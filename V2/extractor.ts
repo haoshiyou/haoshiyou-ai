@@ -64,7 +64,6 @@ export class HsyExtractor {
   public static extractPrice(msg:string, data):any {
     // Not a phone number
     let phoneStr = this.extractPhone(msg);
-    console.log(' --- phoneStr: ', phoneStr);
     // Not a street number
     // Not a year number, not near 年
     // Not in a URL
@@ -313,6 +312,9 @@ export class HsyExtractor {
       "萨拉托加": 'Saratoga',
       "伯克利": 'Berkeley',
       "海沃德": 'Hayward',
+      "东帕罗奥图": 'East Palo Alto',
+      '东帕洛阿托': 'East Palo Alto',
+      "东帕罗奥多": 'East Palo Alto',
       "帕罗奥图": 'Palo Alto',
       '帕洛阿托': 'Palo Alto',
       "帕罗奥多": 'Palo Alto',
@@ -344,6 +346,7 @@ export class HsyExtractor {
       'south san francisco',
       'downtown francisco',
       'san francisco',
+      'east palo alto',
       'palo alto',
       'redwood city',
       'fremont',
@@ -379,7 +382,10 @@ export class HsyExtractor {
     let abbrToFull = {
       'MTV': 'Mountain View',
       'SV': 'Sunnyvale',
+      'EPA': 'East Palo Alto',
       'PA': 'Palo Alto',
+      'MP': 'Menlo Park',
+      'SSF': 'South San Francisco',
       'SF': 'San Francisco',
       'SJ': 'San Jose',
       'CU': 'Cupertino'

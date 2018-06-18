@@ -22,6 +22,20 @@ function main(msg:String) {
 
     var csv_data = fs.readFileSync('../input/testdata.csv');
     var line = 0;
+    var zipcodeTotal = 0;
+    var zipcodeCorrect = 0;
+    var cityTotal = 0;
+    var cityCorrect = 0;
+    var addressTotal = 0;
+    var addressCorrect = 0;
+    var priceTotal = 0;
+    var priceCorrect = 0;
+    var phoneTotal = 0;
+    var phoneCorrect = 0;
+    var emailTotal = 0;
+    var emailCorrect = 0;
+    var wechatTotal = 0;
+    var wechatCorrect = 0;
     var promise = csv(csv_data, {
               raw: false,     // do not decode to utf-8 strings
               separator: ',', // specify optional cell separator
@@ -54,14 +68,26 @@ function main(msg:String) {
                 if (zipcode) {
                     row[4] = zipcode;
                 }
+                if (row[3] !== "____") {
+                    zipcodeTotal++;
+                }
                 if (row[4] == row[3]) {
                     correct_count++;
+                    if (row[3] !== "____") {
+                        zipcodeCorrect++;
+                    }
                 }
 
                 let city = HsyExtractor.extractCity(case_data);
                 row[6] = city;
+                if (row[5] !== "____") {
+                    cityTotal++;
+                }
                 if (row[6] == row[5]) {
                     correct_count++;
+                    if (row[5] !== "____") {
+                        cityCorrect++;
+                    }
                 }
 
                 let fullAddr = HsyExtractor.findAddress(case_data);
@@ -69,32 +95,56 @@ function main(msg:String) {
                 if (fullAddr) {
                     row[8] = '"' + fullAddr + '"';
                 }
+                if (row[7] !== "____") {
+                    addressTotal++;
+                }
                 if (row[8] == row[7]) {
                     correct_count++;
+                    if (row[7] !== "____") {
+                        addressCorrect++;
+                    }
                 }
 
                 let phone = HsyExtractor.extractPhone(case_data);
                 if (phone) {
                     row[10] = phone;
                 }
+                if (row[9] !== "____") {
+                    phoneTotal++;
+                }
                 if (row[10] == row[9]) {
                     correct_count++;
+                    if (row[9] !== "____") {
+                        phoneCorrect++;
+                    }
                 }
 
                 let email = HsyExtractor.extractEmail(case_data);
                 if (email) {
                     row[12] = email;
                 }
+                if (row[11] !== "____") {
+                    emailTotal++;
+                }
                 if (row[12] == row[11]) {
                     correct_count++;
+                    if (row[11] !== "____") {
+                        emailCorrect++;
+                    }
                 }
 
                 let price = HsyExtractor.extractPrice(case_data);
                 if (price) {
                     row[16] = price;
                 }
+                if (row[15] !== "____") {
+                    priceTotal++;
+                }
                 if (row[16] == row[15]) {
                     correct_count++;
+                    if (row[15] !== "____") {
+                        priceCorrect++;
+                    }
                 }
 
                 row[1] = correct_count;
@@ -107,6 +157,13 @@ function main(msg:String) {
             console.log("content: " + content);
             fs.writeFileSync(output_filename, content, "utf-8");
             console.log(" --- STOP --- ");
+            console.log(' ---   priceTotal: {},     priceCorrect: {}', priceTotal, priceCorrect);
+            console.log(' --- zipcodeTotal: {},   zipcodeCorrect: {}', zipcodeTotal, zipcodeCorrect);
+            console.log(' ---    cityTotal: {},      cityCorrect: {}', cityTotal, cityCorrect);
+            console.log(' --- addressTotal: {},   addressCorrect: {}', addressTotal, addressCorrect);
+            console.log(' ---   phoneTotal: {},     phoneCorrect: {}', phoneTotal, phoneCorrect);
+            console.log(' ---   emailTotal: {},     emailCorrect: {}', emailTotal, emailCorrect);
+            console.log(' ---  wechatTotal: {},    wechatCorrect: {}', wechatTotal, wechatCorrect);
         });
 }
 
