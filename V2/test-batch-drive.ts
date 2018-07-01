@@ -157,13 +157,13 @@ function main(msg:String) {
             console.log("content: " + content);
             fs.writeFileSync(output_filename, content, "utf-8");
             console.log(" --- STOP --- ");
-            console.log(' ---   priceTotal: {},     priceCorrect: {}', priceTotal, priceCorrect);
-            console.log(' --- zipcodeTotal: {},   zipcodeCorrect: {}', zipcodeTotal, zipcodeCorrect);
-            console.log(' ---    cityTotal: {},      cityCorrect: {}', cityTotal, cityCorrect);
-            console.log(' --- addressTotal: {},   addressCorrect: {}', addressTotal, addressCorrect);
-            console.log(' ---   phoneTotal: {},     phoneCorrect: {}', phoneTotal, phoneCorrect);
-            console.log(' ---   emailTotal: {},     emailCorrect: {}', emailTotal, emailCorrect);
-            console.log(' ---  wechatTotal: {},    wechatCorrect: {}', wechatTotal, wechatCorrect);
+            console.log(' ---   priceTotal: %d,     priceCorrect: %d', priceTotal, priceCorrect);
+            console.log(' --- zipcodeTotal: %d,   zipcodeCorrect: %d', zipcodeTotal, zipcodeCorrect);
+            console.log(' ---    cityTotal: %d,      cityCorrect: %d', cityTotal, cityCorrect);
+            console.log(' --- addressTotal: %d,   addressCorrect: %d', addressTotal, addressCorrect);
+            console.log(' ---   phoneTotal: %d,     phoneCorrect: %d', phoneTotal, phoneCorrect);
+            console.log(' ---   emailTotal: %d,     emailCorrect: %d', emailTotal, emailCorrect);
+            console.log(' ---  wechatTotal: %d,    wechatCorrect: %d', wechatTotal, wechatCorrect);
         });
 }
 
