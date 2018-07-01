@@ -90,7 +90,7 @@ function main(msg:String) {
                     }
                 }
 
-                let fullAddr = HsyExtractor.findAddress(case_data);
+                let fullAddr = HsyExtractor.extractFullAddr(case_data);
                 row[7] = '"' + row[7] + '"';
                 if (fullAddr) {
                     row[8] = '"' + fullAddr + '"';

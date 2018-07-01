@@ -404,8 +404,8 @@ export class HsyExtractor {
 
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ADDRESS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-  public static findAddress(msg) {
-    let addr = this.extractFullAddr(msg);
+  public static extractFullAddr(msg) {
+    let addr = this.extractFullAddr_old(msg);
     if (addr != '____') {
         return addr;
     }
@@ -445,7 +445,7 @@ export class HsyExtractor {
     return addr;
   }
 
-  private static extractFullAddr(msg) {
+  private static extractFullAddr_old(msg) {
     // 地址 + 数字门牌号 + 路名 + 路名后缀 + 城市 + CA + 邮编
     let reg = /(?!(地址|位于|在|地处|ADDRESS|ADDR|LOCATION|LOC|^)[:, ]{0,3})?[0-9]{1,7}[ ]{1}([A-Z0-9, #]{0,20})(AVENEUS|AV|AVE|COURT|CT|STREET|ST|DRIVE|DR|BLVD|ROAD|RD|TERRACE|TR)+[A-Z0-9, #]{1,20}[, ]{0,2}(CA|CALIFORNIA)?[, ]{0,2}(9[4,5]\d{3})?\b/ig;
     let ret= msg.match(reg);
