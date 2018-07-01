@@ -6,11 +6,16 @@ let fs = require('fs');
 let path = require('path');
 let useV2 = true;
 let HsyExtractor;
+var PLACEHOLDER = "____";
 
 if (useV2) {
   HsyExtractor = HsyExtractorV2;
 } else {
   HsyExtractor = HsyExtractorV1;
+}
+
+function putPlaceholderIfNull(value:String) {
+    return value === null ? PLACEHOLDER : value;
 }
 
 function main(msg:String) {
@@ -59,90 +64,90 @@ function main(msg:String) {
 
                 let correct_count = 0;
 
-                let title = HsyExtractor.extractTitle(case_data);
+                let title = putPlaceholderIfNull(HsyExtractor.extractTitle(case_data));
                 if (title) {
                     row[2] = '"' + title + '"';
                 }
 
-                let zipcode = HsyExtractor.extractZipcode(case_data);
+                let zipcode = putPlaceholderIfNull(HsyExtractor.extractZipcode(case_data));
                 if (zipcode) {
                     row[4] = zipcode;
                 }
-                if (row[3] !== "____") {
+                if (row[3] !== PLACEHOLDER) {
                     zipcodeTotal++;
                 }
                 if (row[4] == row[3]) {
                     correct_count++;
-                    if (row[3] !== "____") {
+                    if (row[3] !== PLACEHOLDER) {
                         zipcodeCorrect++;
                     }
                 }
 
-                let city = HsyExtractor.extractCity(case_data);
+                let city = putPlaceholderIfNull(HsyExtractor.extractCity(case_data));
                 row[6] = city;
-                if (row[5] !== "____") {
+                if (row[5] !== PLACEHOLDER) {
                     cityTotal++;
                 }
                 if (row[6] == row[5]) {
                     correct_count++;
-                    if (row[5] !== "____") {
+                    if (row[5] !== PLACEHOLDER) {
                         cityCorrect++;
                     }
                 }
 
-                let fullAddr = HsyExtractor.extractFullAddr(case_data);
+                let fullAddr = putPlaceholderIfNull(HsyExtractor.extractFullAddr(case_data));
                 row[7] = '"' + row[7] + '"';
                 if (fullAddr) {
                     row[8] = '"' + fullAddr + '"';
                 }
-                if (row[7] !== "____") {
+                if (row[7] !== PLACEHOLDER) {
                     addressTotal++;
                 }
                 if (row[8] == row[7]) {
                     correct_count++;
-                    if (row[7] !== "____") {
+                    if (row[7] !== PLACEHOLDER) {
                         addressCorrect++;
                     }
                 }
 
-                let phone = HsyExtractor.extractPhone(case_data);
+                let phone = putPlaceholderIfNull(HsyExtractor.extractPhone(case_data));
                 if (phone) {
                     row[10] = phone;
                 }
-                if (row[9] !== "____") {
+                if (row[9] !== PLACEHOLDER) {
                     phoneTotal++;
                 }
                 if (row[10] == row[9]) {
                     correct_count++;
-                    if (row[9] !== "____") {
+                    if (row[9] !== PLACEHOLDER) {
                         phoneCorrect++;
                     }
                 }
 
-                let email = HsyExtractor.extractEmail(case_data);
+                let email = putPlaceholderIfNull(HsyExtractor.extractEmail(case_data));
                 if (email) {
                     row[12] = email;
                 }
-                if (row[11] !== "____") {
+                if (row[11] !== PLACEHOLDER) {
                     emailTotal++;
                 }
                 if (row[12] == row[11]) {
                     correct_count++;
-                    if (row[11] !== "____") {
+                    if (row[11] !== PLACEHOLDER) {
                         emailCorrect++;
                     }
                 }
 
-                let price = HsyExtractor.extractPrice(case_data);
+                let price = putPlaceholderIfNull(HsyExtractor.extractPrice(case_data));
                 if (price) {
                     row[16] = price;
                 }
-                if (row[15] !== "____") {
+                if (row[15] !== PLACEHOLDER) {
                     priceTotal++;
                 }
                 if (row[16] == row[15]) {
                     correct_count++;
-                    if (row[15] !== "____") {
+                    if (row[15] !== PLACEHOLDER) {
                         priceCorrect++;
                     }
                 }

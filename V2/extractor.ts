@@ -25,7 +25,7 @@ export class HsyExtractor {
         max = priorities[i];
       }
     }
-    return pick != -1 ? matches[pick] : '____';
+    return pick != -1 ? matches[pick] : null;
   }
 
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ TITLE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
@@ -44,7 +44,7 @@ export class HsyExtractor {
         startIndex = endIndex + 1;
         endIndex = msg.indexOf('\n', startIndex);
     }
-    return '____';
+    return null;
   }
 
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ PRICE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
@@ -72,7 +72,7 @@ export class HsyExtractor {
     let regFallBack = /([^\d][1-9]{1},\d{3}[^\d])|([^\d][1-9]{1}\d{2,3}[^\d])/g;
     let numbers = msg.match(regFallBack);
     if (numbers == null) {
-        return '____';
+        return null;
     }
     let priorities = Array.from(Array(numbers.length), () => 0)
     if (HsyExtractor.__DEBUG__) {
@@ -146,7 +146,7 @@ export class HsyExtractor {
         }
       }
       let price = this.pickMaximumPriority(numbers, priorities);
-      return price == HsyExtractor.YEAR ? '____' : price.replace(',','');
+      return price === null ? null : price.replace(',','');
     }
     return null;
   }
@@ -232,7 +232,7 @@ export class HsyExtractor {
         console.log('numbers: ', numbers);
     }
     if (numbers == null) {
-        return "____";
+        return null;
     }
     let priorities = Array.from(Array(numbers.length), () => 0);
     if (HsyExtractor.__DEBUG__) {
@@ -267,14 +267,14 @@ export class HsyExtractor {
       }
       return this.pickMaximumPriority(numbers, priorities);
     }
-    return ____;
+    return null;
   }
 
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ LOCATION ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
   // if ZIPCODE is provided, not extract CITY
   public static async extractCityWithZipcode(msg, zipcode):Promise<object> {
-    if (zipcode && zipcode != "____") {
+    if (zipcode && zipcode != null) {
         return new Promise((resolve, reject) => {
           googleMapsClient.geocode({
             address: zipcode
@@ -374,7 +374,7 @@ export class HsyExtractor {
         }, null, ' ')}`);
       return this.cityAbbrToFullName(city);
     }
-    return '____';
+    return null;
   }
 
   private static cityAbbrToFullName(abbr) {
@@ -406,40 +406,40 @@ export class HsyExtractor {
 
   public static extractFullAddr(msg) {
     let addr = this.extractFullAddr_old(msg);
-    if (addr != '____') {
+    if (addr != null) {
         return addr;
     }
     addr = this.extractGoogleMapsUrl(msg);
-    if (addr != '____') {
+    if (addr != null) {
         return addr;
     }
     addr = this.extractGPS(msg);
-    if (addr != '____') {
+    if (addr != null) {
         return 'GPS: ' + addr;
     }
 
-    if (addr == '____') {
+    if (addr == null) {
         addr = this.extractApartment(msg);
-        if (addr != '____') addr = addr + ' Apartments';
+        if (addr != null) addr = addr + ' Apartments';
     }
-    if (addr == '____') {
+    if (addr == null) {
         addr = this.extractTransportStation(msg);
-        if (addr != '____') addr = addr + ' Station';
+        if (addr != null) addr = addr + ' Station';
     }
 
     let zip = this.extractZipcode(msg);
-    let city = '____';
+    let city = null;
     this.extractCityWithZipcode(msg, zip).then(
         (city) => {
             this.city = city;
         }
     );
-    if (city != '____') {
-        if (addr == '____') addr = city;
+    if (city != null) {
+        if (addr == null) addr = city;
         else addr += ', ' + city;
     }
-    if (zip != '____') {
-        if (addr == '____') addr = city;
+    if (zip != null) {
+        if (addr == null) addr = city;
         else addr += ', ' + zip;
     }
     return addr;
@@ -447,10 +447,10 @@ export class HsyExtractor {
 
   private static extractFullAddr_old(msg) {
     // 地址 + 数字门牌号 + 路名 + 路名后缀 + 城市 + CA + 邮编
-    let reg = /(?!(地址|位于|在|地处|ADDRESS|ADDR|LOCATION|LOC|^)[:, ]{0,3})?[0-9]{1,7}[ ]{1}([A-Z0-9, #]{0,20})(AVENEUS|AV|AVE|COURT|CT|STREET|ST|DRIVE|DR|BLVD|ROAD|RD|TERRACE|TR)+[A-Z0-9, #]{1,20}[, ]{0,2}(CA|CALIFORNIA)?[, ]{0,2}(9[4,5]\d{3})?\b/ig;
+    let reg = /(?!(地址|位于|在|地处|ADDRESS|ADDR|LOCATION|LOC|^)[:, ]{0,3})?[0-9]{1,7}[ ]{1}([A-Z0-9, #]{0,20})(AVENEUS|AV|AVE|COURT|CT|STREET|ST|DRIVE|DR|BLVD|ROAD|RD|TERRACE|TR)+[, ]{0,2}([A-Z0-9, #]{1,20})[, ]{0,2}(CA|CALIFORNIA)?[, ]{0,2}(9[4,5]\d{3})?\b/ig;
     let ret= msg.match(reg);
     if (!ret) {
-        return '____';
+        return null;
     }
     ret = ret.filter(matched => matched.length > 7);
     let matchedStr = ret[0];
@@ -481,7 +481,7 @@ export class HsyExtractor {
         let ret = msg.match(reg);
         if (!ret) {
             //TODO: 直接精确找 List<公寓名>
-            return '____';
+            return null;
         }
         // 找出最多两个英文单词作为可能的 公寓名称
         var candidates = [];
@@ -516,7 +516,7 @@ export class HsyExtractor {
     }
 
     private static pickApartmentName(candidates) {
-        if (candidates.length == 0) return '____';
+        if (candidates.length == 0) return null;
         let avoidName = ['MTV','SV','SF','SJ','PA','CU','FREMONT','NEWARK','MOUNTAIN VIEW','SUNNYVALE','SANTA CLARA','REDWOOD','REDWOOD CITY','PALO ALTO','EAST PALO ALTO','MENLO PARK','CUPERTINO','UNION CITY','MILPITAS','DALY CITY','SAN FRANCISCO','SOUTH SAN FRANCISCO'];
         for (let i = 0; i < candidates.length; i++) {
             let name = candidates[i];
@@ -524,7 +524,7 @@ export class HsyExtractor {
                 return name;
             }
         }
-        return '____';
+        return null;
     }
 
     private static extractTransportStation(msg) {
@@ -532,7 +532,7 @@ export class HsyExtractor {
         let reg = /(?!靠|近|close)(([ a-zA-Z0-9]){1,30})(vta|bart|caltrain|地铁|火车|车).{0,2}(station|站)(.{0,2}(旁|边))?/ig;
         let ret = msg.match(reg);
         if (!ret) {
-            return '____';
+            return null;
         }
         for (let i = 0; i < ret.length; i++) {
             let candidate = ret[i];
@@ -544,12 +544,12 @@ export class HsyExtractor {
                 return candidate;
             }
         }
-        return '____';
+        return null;
     }
 
     private static getValueOrEmpty(value) {
         if (!value) {
-            return '____';
+            return null;
         }
         return value[0];
     }

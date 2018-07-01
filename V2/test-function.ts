@@ -15,7 +15,7 @@ async function loadInput(input:String) {
         .then((city_2) => {
             console.log('city_2:', city_2);
         });
-    var addr = HsyExtractor.findAddress(input);
+    var addr = HsyExtractor.extractFullAddr(input);
     console.log('addr: ', addr);
 }
 
