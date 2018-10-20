@@ -6,11 +6,18 @@ let fs = require('fs');
 let path = require('path');
 let useV2 = true;
 let HsyExtractor;
+var PLACEHOLDER = "____";
+
 if (useV2) {
   HsyExtractor = HsyExtractorV2;
 } else {
   HsyExtractor = HsyExtractorV1;
 }
+
+function putPlaceholderIfNull(value:String) {
+    return value === null ? PLACEHOLDER : value;
+}
+
 function main(msg:String) {
     console.log(" --- argv: ", process.argv);
     console.log(" --- START --- ");
@@ -20,6 +27,20 @@ function main(msg:String) {
 
     var csv_data = fs.readFileSync('../input/testdata.csv');
     var line = 0;
+    var zipcodeTotal = 0;
+    var zipcodeCorrect = 0;
+    var cityTotal = 0;
+    var cityCorrect = 0;
+    var addressTotal = 0;
+    var addressCorrect = 0;
+    var priceTotal = 0;
+    var priceCorrect = 0;
+    var phoneTotal = 0;
+    var phoneCorrect = 0;
+    var emailTotal = 0;
+    var emailCorrect = 0;
+    var wechatTotal = 0;
+    var wechatCorrect = 0;
     var promise = csv(csv_data, {
               raw: false,     // do not decode to utf-8 strings
               separator: ',', // specify optional cell separator
@@ -30,50 +51,105 @@ function main(msg:String) {
             }
         )
         .on('data', (row) => {
-        if (line > 0 && row[0].length > 0) {
+            if (line > 0 && row[0].length > 0) {
                 let case_filename = row[0];
-                let case_data = fs.readFileSync("../testdata/" + case_filename, 'utf8');
+                let case_data = null;
+                try {
+                    case_data = fs.readFileSync("../testdata/" + case_filename, 'utf8');
+                } catch (err) {
+                    return;
+                }
+                // pre-process
+                case_data = preProcess(case_data);
+
                 let correct_count = 0;
 
-                let title = HsyExtractor.extractTitle(case_data);
+                let title = putPlaceholderIfNull(HsyExtractor.extractTitle(case_data));
                 if (title) {
                     row[2] = '"' + title + '"';
                 }
 
-                let zipcode = HsyExtractor.extractZipcode(case_data);
+                let zipcode = putPlaceholderIfNull(HsyExtractor.extractZipcode(case_data));
                 if (zipcode) {
                     row[4] = zipcode;
                 }
+                if (row[3] !== PLACEHOLDER) {
+                    zipcodeTotal++;
+                }
                 if (row[4] == row[3]) {
                     correct_count++;
+                    if (row[3] !== PLACEHOLDER) {
+                        zipcodeCorrect++;
+                    }
                 }
 
-                let addr = HsyExtractor.extractFullAddr(case_data);
-                row[7] = '"' + row[7] + '"';
-                console.log(' --- case %s addr: %s', case_filename, addr);
+                let city = putPlaceholderIfNull(HsyExtractor.extractCity(case_data));
+                row[6] = city;
+                if (row[5] !== PLACEHOLDER) {
+                    cityTotal++;
+                }
+                if (row[6] == row[5]) {
+                    correct_count++;
+                    if (row[5] !== PLACEHOLDER) {
+                        cityCorrect++;
+                    }
+                }
 
-                let phone = HsyExtractor.extractPhone(case_data);
+                let fullAddr = putPlaceholderIfNull(HsyExtractor.extractFullAddr(case_data));
+                row[7] = '"' + row[7] + '"';
+                if (fullAddr) {
+                    row[8] = '"' + fullAddr + '"';
+                }
+                if (row[7] !== PLACEHOLDER) {
+                    addressTotal++;
+                }
+                if (row[8] == row[7]) {
+                    correct_count++;
+                    if (row[7] !== PLACEHOLDER) {
+                        addressCorrect++;
+                    }
+                }
+
+                let phone = putPlaceholderIfNull(HsyExtractor.extractPhone(case_data));
                 if (phone) {
                     row[10] = phone;
                 }
+                if (row[9] !== PLACEHOLDER) {
+                    phoneTotal++;
+                }
                 if (row[10] == row[9]) {
                     correct_count++;
+                    if (row[9] !== PLACEHOLDER) {
+                        phoneCorrect++;
+                    }
                 }
 
-                let email = HsyExtractor.extractEmail(case_data);
+                let email = putPlaceholderIfNull(HsyExtractor.extractEmail(case_data));
                 if (email) {
                     row[12] = email;
                 }
+                if (row[11] !== PLACEHOLDER) {
+                    emailTotal++;
+                }
                 if (row[12] == row[11]) {
                     correct_count++;
+                    if (row[11] !== PLACEHOLDER) {
+                        emailCorrect++;
+                    }
                 }
 
-                let price = HsyExtractor.extractPrice(case_data);
+                let price = putPlaceholderIfNull(HsyExtractor.extractPrice(case_data));
                 if (price) {
                     row[16] = price;
                 }
+                if (row[15] !== PLACEHOLDER) {
+                    priceTotal++;
+                }
                 if (row[16] == row[15]) {
                     correct_count++;
+                    if (row[15] !== PLACEHOLDER) {
+                        priceCorrect++;
+                    }
                 }
 
                 row[1] = correct_count;
@@ -86,7 +162,19 @@ function main(msg:String) {
             console.log("content: " + content);
             fs.writeFileSync(output_filename, content, "utf-8");
             console.log(" --- STOP --- ");
+            console.log(' ---   priceTotal: %d,     priceCorrect: %d', priceTotal, priceCorrect);
+            console.log(' --- zipcodeTotal: %d,   zipcodeCorrect: %d', zipcodeTotal, zipcodeCorrect);
+            console.log(' ---    cityTotal: %d,      cityCorrect: %d', cityTotal, cityCorrect);
+            console.log(' --- addressTotal: %d,   addressCorrect: %d', addressTotal, addressCorrect);
+            console.log(' ---   phoneTotal: %d,     phoneCorrect: %d', phoneTotal, phoneCorrect);
+            console.log(' ---   emailTotal: %d,     emailCorrect: %d', emailTotal, emailCorrect);
+            console.log(' ---  wechatTotal: %d,    wechatCorrect: %d', wechatTotal, wechatCorrect);
         });
+}
+
+function preProcess(data:String) {
+    // id: 54f22135-f6c7-4350-80d9-9f7caf0481b8
+    return data.replace(/id: [0-9a-z]{8}(-[0-9a-z]{4}){3}-[0-9a-z]{12}\n/g, "");
 }
 
 function formatDate(date) {
@@ -100,3 +188,4 @@ function formatDate(date) {
 }
 
 main();
+
