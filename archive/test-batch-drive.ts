@@ -1,5 +1,5 @@
-import {HsyExtractor as HsyExtractorV2} from "../V2/extractor";
-import {HsyExtractor as HsyExtractorV1} from "../extractor";
+import {HsyExtractor as HsyExtractorV2} from "./V2/extractor";
+import {HsyExtractor as HsyExtractorV1} from "./V1/extractor";
 
 let csv = require('csv-parse');
 let fs = require('fs');
