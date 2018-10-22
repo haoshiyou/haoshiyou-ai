@@ -2,18 +2,46 @@ const googleMapsClient = require('@google/maps').createClient({
     key: 'AIzaSyAvTvxqZ2Qx6Em1XdgbIFYa4UOuZ8l85bc'
 });
 
+/**
+ * Reutrn the first not null parameter
+ *
+ * @param {*} a
+ * @param {*} b
+ * @param {*} c
+ * @returns
+ */
 function firstNotNull(a, b, c)
 {
     if (a) return a;
     if (b) return b;
     return c;
 }
+
+/**
+ * class use for extracte data from message
+ *
+ * @export
+ * @class HsyExtractor
+ */
 export class HsyExtractor
 {
-    private static __DEBUG__: boolean = false;
+    private static __DEBUG__: boolean = false;    //Debug flag
     private static YEAR: number = 2018;
 
-    private static pickMaximumPriority(matches: Array<any>, priorities: Array<any>): any {
+
+    /**
+     *
+     *
+     * @private
+     * @static
+     * @param {Array<any>} matches
+     * @param {Array<any>} priorities
+     * @returns {*}
+     * @memberof HsyExtractor
+     * @author Renjie Weng
+     */
+    private static pickMaximumPriority(matches: Array<any>, priorities: Array<any>): any 
+    {
         if (HsyExtractor.__DEBUG__)
         {
             console.log(" --- matches: ", matches);
@@ -31,9 +59,18 @@ export class HsyExtractor
         }
         return matches[pick];
     }
-    /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ TITLE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-    // From V2
-    public static extractTitle(msg: string, data): any
+    
+    /**
+     * Extract title for a message data
+     *
+     * @static
+     * @param {string} msg: input message
+     * @param {*} data
+     * @returns {string}
+     * @memberof HsyExtractor
+     * @author Renjie Weng
+     */
+    public static extractTitle(msg: string, data): string
     {
         // 第一个非空行
         // 不小于10个char
@@ -52,8 +89,18 @@ export class HsyExtractor
         }
         return '____';
     }
-    /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ PRICE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-    // From V2
+
+    /**
+     * Extract price for a message data
+     *
+     * @static
+     * @param {string} msg
+     * @param {*} data
+     * @returns {*}
+     * @memberof HsyExtractor
+     * @author Renjie Weng
+     * @todo clean code, and should return string
+     */
     public static extractPrice(msg: string, data): any
     {
         // Not a phone number
@@ -121,9 +168,19 @@ export class HsyExtractor
         }
         return null;
     }  
-    /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ PHONE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-    // From V1 and V2
-    public static extractPhone(msg, data)
+    
+    /**
+     * Extract phone number for a message data
+     *
+     * @static
+     * @param {string} msg
+     * @param {*} data
+     * @returns
+     * @memberof HsyExtractor
+     * @author Renjie Weng, Zainan Victor Zhou
+     * @todo clean code, and should return string
+     */
+    public static extractPhone(msg:string, data)
     {
         // Not part of a URL (espectially not in a Craigslist URL)
         let reg = /\b\d{3}[-\ ]?\d{3}[-\ ]?\d{4}\b/g;
@@ -147,7 +204,19 @@ export class HsyExtractor
     }
     /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ EMAIL ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
     // From V1 and V2
-    public static extractEmail(msg, data)
+    
+    /**
+     * Extract email for a message data
+     *
+     * @static
+     * @param {string} msg
+     * @param {*} data
+     * @returns
+     * @memberof HsyExtractor
+     * @author Renjie Weng, Zainan Victor Zhou
+     * @todo clean code, and should return string
+     */
+    public static extractEmail(msg:string, data)
     {
         // https://www.regular-expressions.info/email.html
         let reg = /([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)/g;
@@ -169,9 +238,19 @@ export class HsyExtractor
         }
         return null;
     }
-    /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ZIPCODE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-    //From V2
-    public static extractZipcode(msg, data)
+
+    /**
+     * Extract zipcode for a message data
+     *
+     * @static
+     * @param {string} msg
+     * @param {*} data
+     * @returns
+     * @memberof HsyExtractor
+     * @author Renjie Weng, Zainan Victor Zhou
+     * @todo clean code, and should return string
+     */
+    public static extractZipcode(msg:string, data)
     {
         // 在地址中靠后的
         // 出现过多次的(title, address)
@@ -228,9 +307,19 @@ export class HsyExtractor
         }
         return "____";
     }
-    /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ WECHAT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-    // FROM V1
-    public static extractWeChat(msg, data)
+
+    /**
+     * Extract wechat id for a message data
+     *
+     * @static
+     * @param {string} msg
+     * @param {*} data
+     * @returns
+     * @memberof HsyExtractor
+     * @author Zainan Victor Zhou
+     * @todo clean code, and should return string
+     */
+    public static extractWeChat(msg:string, data)
     {
         // let reg = /(微信|WeChat|WeiXin)(\ ?ID)?[:：\ ]*[A-Za-z0-9_]+\b/i;
         // let reg = /(微信|WeChat|Weixin)/i;
@@ -255,9 +344,18 @@ export class HsyExtractor
         return null;
     }
 
-    /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ LOCATION ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-    // From V1
-    public static extractCity(msg, data)
+    /**
+     * Extract city for a message data
+     *
+     * @static
+     * @param {string} msg
+     * @param {*} data
+     * @returns
+     * @memberof HsyExtractor
+     * @author Zainan Victor Zhou
+     * @todo clean code, and should return string
+     */
+    public static extractCity(msg: string, data)
     {
         // if ZIPCODE is provided, not extract CITY
         let chineseCityToEnglish = {
@@ -342,8 +440,17 @@ export class HsyExtractor
         return null;
     }
 
-    /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ADDRESS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-    // From V2
+    /**
+     * Extract full address for a message data
+     *
+     * @static
+     * @param {string} msg
+     * @param {*} data
+     * @returns
+     * @memberof HsyExtractor
+     * @author Renjie Weng, Zainan Victor Zhou
+     * @todo clean code, and should return string
+     */
     public static extractFullAddr(msg, data)
     {
         // In address form
@@ -362,7 +469,17 @@ export class HsyExtractor
         }
         return null;
     }
-    // From V2(unused)
+
+    /**
+     *
+     * @private
+     * @static
+     * @param {*} msg
+     * @param {*} data
+     * @returns
+     * @memberof HsyExtractor
+     * @author Renjie Weng
+     */
     private static findAddrByCaliforniaAndZip(msg, data)
     {
         let reg = /\d+.+(?=CA|California)[A-Z]{2}[, ]+\d{5}(?:-\d{4})?/;
@@ -381,7 +498,18 @@ export class HsyExtractor
         return null;
     }
 
-    // From V1
+    
+    /**
+     * locate geo point from full address, zip code, and city
+     *
+     * @static
+     * @param {*} fullAddr
+     * @param {*} zipcode
+     * @param {*} city
+     * @returns {Promise<object>}
+     * @memberof HsyExtractor
+     * @author Zainan Victor Zhou
+     */
     public static async maybeExtractGeoPoint(fullAddr, zipcode, city): Promise<object>
     {
         let addToQuery = firstNotNull(fullAddr, zipcode, city);
