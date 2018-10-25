@@ -62,12 +62,12 @@ export class HsyExtractor
      *
      * @static
      * @param {string} msg: input message
-     * @param {*} data
+     * @param {*} [data]
      * @returns {string}
      * @memberof HsyExtractor
      * @author Renjie Weng
      */
-    public static extractTitle(msg: string, data): string
+    public static extractTitle(msg: string, data?:any): string
     {
         // 第一个非空行
         // 不小于10个char
@@ -90,12 +90,12 @@ export class HsyExtractor
      *
      * @static
      * @param {string} msg
-     * @param {*} data
+     * @param {*} [data]
      * @returns {*}
      * @memberof HsyExtractor
      * @author Renjie Weng
      */
-    public static extractPrice(msg: string, data)
+    public static extractPrice(msg: string, data?)
     {
         // Not a phone number
         // Not a street number
@@ -145,12 +145,12 @@ export class HsyExtractor
      *
      * @static
      * @param {string} msg
-     * @param {*} data
+     * @param {*} [data]
      * @returns {string}
      * @memberof HsyExtractor
      * @author Renjie Weng, Zainan Victor Zhou
      */
-    public static extractPhone(msg: string, data): string
+    public static extractPhone(msg: string, data?:any): string
     {
         // Not part of a URL (espectially not in a Craigslist URL)
         const reg = /\b\d{3}[-\ ]?\d{3}[-\ ]?\d{4}\b/g;
@@ -174,12 +174,12 @@ export class HsyExtractor
      *
      * @static
      * @param {string} msg
-     * @param {*} data
+     * @param {*} [data]
      * @returns {string}
      * @memberof HsyExtractor
      * @author Renjie Weng, Zainan Victor Zhou
      */
-    public static extractEmail(msg: string, data): string
+    public static extractEmail(msg: string, data?:any): string
     {
         // https://www.regular-expressions.info/email.html
         const reg = /([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)/g;
@@ -203,12 +203,12 @@ export class HsyExtractor
      *
      * @static
      * @param {string} msg
-     * @param {*} data
+     * @param {*} [data]
      * @returns {string}
      * @memberof HsyExtractor
      * @author Renjie Weng, Zainan Victor Zhou
      */
-    public static extractZipcode(msg: string, data): string
+    public static extractZipcode(msg: string, data?:any): string
     {
         // 在地址中靠后的
         // 出现过多次的(title, address)
@@ -251,13 +251,13 @@ export class HsyExtractor
      *
      * @static
      * @param {string} msg
-     * @param {*} data
+     * @param {*} [data]
      * @returns {string}
      * @memberof HsyExtractor
      * @author Zainan Victor Zhou
      * @todo clean code, and should return string
      */
-    public static extractWeChat(msg: string, data): string
+    public static extractWeChat(msg: string, data?:any): string
     {
         // let reg = /(微信|WeChat|WeiXin)(\ ?ID)?[:：\ ]*[A-Za-z0-9_]+\b/i;
         // let reg = /(微信|WeChat|Weixin)/i;
@@ -286,12 +286,12 @@ export class HsyExtractor
      *
      * @static
      * @param {string} msg
-     * @param {*} data
+     * @param {*} [data]
      * @returns {string}
      * @memberof HsyExtractor
      * @author Zainan Victor Zhou
      */
-    public static extractCity(msg: string, data): string
+    public static extractCity(msg: string, data?:any): string
     {
         // if ZIPCODE is provided, not extract CITY
         const chineseCityToEnglish = {
@@ -361,12 +361,12 @@ export class HsyExtractor
      *
      * @static
      * @param {string} msg
-     * @param {*} data
+     * @param {*} [data]
      * @returns
      * @memberof HsyExtractor
      * @author Renjie Weng, Zainan Victor Zhou
      */
-    public static extractFullAddr(msg: string, data): string
+    public static extractFullAddr(msg: string, data?:any): string
     {
         // In address form
         const reg = /\d+.+(?=CA)[A-Z]{2}[, ]+\d{5}(?:-\d{4})?/;
@@ -388,12 +388,12 @@ export class HsyExtractor
      * @private
      * @static
      * @param {*} msg
-     * @param {*} data
+     * @param {*} [data]
      * @returns
      * @memberof HsyExtractor
      * @author Renjie Weng
      */
-    private static findAddrByCaliforniaAndZip(msg, data)
+    private static findAddrByCaliforniaAndZip(msg, data?:any)
     {
         let reg = /\d+.+(?=CA|California)[A-Z]{2}[, ]+\d{5}(?:-\d{4})?/;
         let ret = msg.toUpperCase().match(reg);
