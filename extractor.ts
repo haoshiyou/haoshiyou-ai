@@ -371,7 +371,7 @@ export class HsyExtractor
         const reg = /\d+.+(?=CA)[A-Z]{2}[, ]+\d{5}(?:-\d{4})?/;
         const ret = msg.toUpperCase().match(reg);
 
-        if (!ret && ret[0])
+        if (!ret || !ret[0])
             return 'N/A';
         
         if (HsyExtractor.__DEBUG__) 
