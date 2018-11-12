@@ -61,9 +61,9 @@ function main(inFilePath?: string, outFilePath?: string): void
     {
       list = list.slice(1).filter(d => d && d != 'NULL');
       const outFile: fs.WriteStream = fs.createWriteStream(outFilePath);
-      outFile.write(`content,price,full address,city,zipcode,phone,wechat,email\n`);
+      outFile.write(`content,price,full address,city,zipcode,phone,wechat,email,note\n`);
       for (const content of list)
-        outFile.write(`"${content}",,,,,,,\n`);
+        outFile.write(`"${content}",,,,,,,,\n`);
       outFile.close();
     })
 }
