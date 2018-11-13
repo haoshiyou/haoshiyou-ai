@@ -136,9 +136,20 @@ function createStat() :Stat
   }
 }
 
+
 /**
- * This will do data comparison with data extraction 
- * @author William Chen
+ * This will do data comparison with data extraction
+ * 1 argv in correct testing file path. default is 'testdata/labeling-data-10252018205253_Done.csv'
+ * 2 argv is output csv file path for extration from extractor. default is 'output/extractor-data-${get_now()}.csv'
+ * 3 arge is output stats file path. default is 'output/extractor-stats-${get_now()}'
+ * 
+ * Note: 
+ * 1. get_now() will create local time.
+ * 2. diff correct testing file and output csv file can compare different since they are same format file.
+ * 
+ * @param {string} [correctFilePath]
+ * @param {string} [outFilePath]
+ * @param {string} [statsFilePath]
  */
 function main(correctFilePath?: string, outFilePath?: string,statsFilePath?:string ): void
 {
