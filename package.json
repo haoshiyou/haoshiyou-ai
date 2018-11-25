@@ -16,6 +16,11 @@
   },
   "license": "MIT",
   "description": "This is the extraction algorithm that extracts data from the message.",
+  "git": {
+    "scripts": {
+      "pre-push": "./scripts/prePush.sh"
+    }
+  },
   "main": "main.ts",
   "devDependencies": {},
   "scripts": {
