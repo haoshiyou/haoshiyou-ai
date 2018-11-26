@@ -1,4 +1,5 @@
 #!/bin/bash
+mkdir tmp
 ts-node "report.ts" "testdata/labeling-data-10252018205253_Done.csv" "tmp/test_out.csv" "tmp/test_stats"
 result=$(diff "stats/stats" "tmp/test_stats" 2>&1)
 if [ -z "${result}" ]; then
