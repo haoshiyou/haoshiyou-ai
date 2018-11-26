@@ -7,7 +7,8 @@ os: linux
 
 
 before_install:
-  - sudo npm -g install ts-node
+  - npm install -g ts-node
+  - npm install -g typescript
 install:
   - sudo npm install
 
