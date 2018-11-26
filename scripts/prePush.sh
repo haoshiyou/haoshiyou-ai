@@ -1,14 +1,21 @@
 #!/bin/bash
+# Ref to wechaty pre-push https://raw.githubusercontent.com/Chatie/wechaty/master/scripts/pre-push.sh
 set -e
 
 [ -n "$NO_HOOK" ] && exit 0
 echo "start pre-push hook"
-ts-node "report.ts" "testdata/labeling-data-10252018205253_Done.csv" "tmp/te st_out.csv" "stats/stats"
-git add "stats/stats"
-git commit -m "update report"
-git push
 
-cat <<'_STR_'
+[ -z "$CYGWIN" ] && {
+  ts-node "report.ts" "testdata/labeling-data-10252018205253_Done.csv" "tmp/test_out.csv" "stats/stats"
+  result=$(git diff "stats/stats" 2>&1)
+  [ ! -z "${result}" ] && {
+    echo "different stats file, commiting now..."
+    git add "stats/stats"
+    git commit -m "update report" 
+  }
+  PRE_HOOK=1 git push
+
+  cat <<'_STR_'
   ____ _ _        ____            _
  / ___(_) |_     |  _ \ _   _ ___| |__
 | |  _| | __|    | |_) | | | / __| '_ \
@@ -21,4 +28,13 @@ cat <<'_STR_'
  ___) | |_| | (_| (_|  __/  __/ (_| |_|
 |____/ \__,_|\___\___\___|\___|\__,_(_)
 
+<<<<<<< HEAD
 _STR_
+=======
+_STR_
+
+  exit 127
+}
+
+echo "PRE-PUSH HOOK PASSED"
+echo
