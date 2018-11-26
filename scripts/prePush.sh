@@ -13,7 +13,7 @@ echo "start pre-push hook"
     git add "stats/stats"
     git commit -m "update report" 
   }
-  PRE_HOOK=1 git push
+  NO_HOOK=1 git push
 
   cat <<'_STR_'
   ____ _ _        ____            _
