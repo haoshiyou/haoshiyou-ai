@@ -2,10 +2,10 @@
 set -e
 
 [ -n "$NO_HOOK" ] && exit 0
-
-ts-node "../report.ts" "../testdata/labeling-data-10252018205253_Done.csv" "../tmp/te st_out.csv" "../stats/stats"
-git add "../stats/stats"
-git commmit -m "update report"
+echo "start pre-push hook"
+ts-node "report.ts" "testdata/labeling-data-10252018205253_Done.csv" "tmp/te st_out.csv" "stats/stats"
+git add "stats/stats"
+git commit -m "update report"
 git push
 
 cat <<'_STR_'
