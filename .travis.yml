@@ -9,6 +9,7 @@ os: linux
 before_install:
   - npm install -g ts-node
   - npm install -g typescript
+  - npm install -g tsc
 install:
   - sudo npm install
 
