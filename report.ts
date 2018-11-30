@@ -1,6 +1,8 @@
+import { csvOption } from './config';
 import { HsyExtractor } from './extractor';
 import * as fs from 'fs';
 import * as csv from 'csv-parse';
+
 
 /*
 REF: https://blog.argcv.com/articles/1036.c
@@ -173,14 +175,7 @@ function main(correctFilePath?: string, outFilePath?: string,statsFilePath?:stri
     correctWechatIndex = correctEmailIndex = undefined;
 
   fs.createReadStream(correctFilePath)
-    .pipe(csv(
-      {
-        raw: false,          // do not decode to utf-8 strings
-        delimiter: ',',      // specify optional cell separator
-        quote: '"',          // specify optional quote character
-        escape: '\\',        // specify optional escape character (defaults to quote value)
-        rowDelimiter: '\n',  // specify a newline character
-      }))
+    .pipe(csv(csvOption))
     .once("data", (data: string[]) =>
     {
       contentIndex = data.indexOf('content');

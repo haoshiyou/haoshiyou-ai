@@ -1,3 +1,4 @@
+import { csvOption } from './config';
 import * as fs from 'fs';
 import * as csv from 'csv-parse';
 
@@ -33,14 +34,7 @@ function main(inFilePath?: string, outFilePath?: string): void
   outFilePath = outFilePath || `output/labeling-data-${get_now()}.csv`;
 
   fs.createReadStream(inFilePath)
-    .pipe(csv(
-      {
-        raw: false,          // do not decode to utf-8 strings
-        delimiter: ',',      // specify optional cell separator
-        quote: '"',          // specify optional quote character
-        escape: '\\',        // specify optional escape character (defaults to quote value)
-        rowDelimiter: '\n',  // specify a newline character
-      }))
+    .pipe(csv(csvOption))
     .once("data", (data: string[]) =>
     {
       contentIndex = data.indexOf('content');
