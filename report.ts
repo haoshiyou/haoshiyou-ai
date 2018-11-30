@@ -234,7 +234,7 @@ function main(correctFilePath?: string, outFilePath?: string,statsFilePath?:stri
         let correctCount = 0, totalCount = 0;
         for (const key of Object.keys(record).filter(key=>key != "CorrectRate" && key != "Content"))
         {
-          if (extractionSoftEquals(record[key].correct,record[key].hsyExt))
+          if (extractionSoftEquals(record[key].correct, record[key].hsyExtraction))
             correctCount++;
           totalCount++;
         }
@@ -261,23 +261,23 @@ function main(correctFilePath?: string, outFilePath?: string,statsFilePath?:stri
       { 
         for (const key of Object.keys(record).filter(key => (key != 'Content' && key != 'CorrectRate')))
         {
-          if (!extractionSoftEquals(record[key].correct, 'N/A') || !extractionSoftEquals(record[key].hsyExt,'N/A'))
+          if (!extractionSoftEquals(record[key].correct, 'N/A') || !extractionSoftEquals(record[key].hsyExtraction,'N/A'))
           {
-            if (extractionSoftEquals(record[key].correct, record[key].hsyExt))
+            if (extractionSoftEquals(record[key].correct, record[key].hsyExtraction))
               correctStats[key].rate++;
             correctStats[key].count++;
           }
           
           if(!extractionSoftEquals(record[key].correct, 'N/A'))
           {
-            if (extractionSoftEquals(record[key].correct, record[key].hsyExt))
+            if (extractionSoftEquals(record[key].correct, record[key].hsyExtraction))
               recallStats[key].rate++;
             recallStats[key].count++;
           }
           
-          if (!extractionSoftEquals(record[key].hsyExt, 'N/A'))
+          if (!extractionSoftEquals(record[key].hsyExtraction, 'N/A'))
           {
-            if (extractionSoftEquals(record[key].correct, record[key].hsyExt))
+            if (extractionSoftEquals(record[key].correct, record[key].hsyExtraction))
               precisionStats[key].rate++;
             precisionStats[key].count++;
           }
