@@ -18,7 +18,7 @@ REF: https://blog.argcv.com/articles/1036.c
  *
  * @returns {string}
  */
-function get_now(): string
+function getNow(): string
 {
   let clock: Date = new Date()
   return clock.toLocaleString('en-US', {
@@ -55,7 +55,7 @@ interface Record
 interface CompareRecord
 {
   correct: string,
-  hsyExt: string,
+  hsyExtraction: string,
 }
 
 /**
@@ -92,7 +92,7 @@ interface StatRecord
  * @param {string} right
  * @returns {boolean}
  */
-function extCompare(left:string, right:string):boolean
+function extractionSoftEquals(left:string, right:string):boolean
 {
   left = left.trim().toUpperCase().replace(/[^A-Za-z0-9@]/gmi,"");
   right = right.trim().toUpperCase().replace(/[^A-Za-z0-9@]/gmi, "");
@@ -156,8 +156,8 @@ function createStat() :Stat
 function main(correctFilePath?: string, outFilePath?: string,statsFilePath?:string ): void
 {
   correctFilePath = correctFilePath || 'testdata/labeling-data-10252018205253_Done.csv';
-  outFilePath = outFilePath || `output/extractor-data-${get_now()}.csv`;
-  statsFilePath = statsFilePath || `output/extractor-stats-${get_now()}`;
+  outFilePath = outFilePath || `output/extractor-data-${getNow()}.csv`;
+  statsFilePath = statsFilePath || `output/extractor-stats-${getNow()}`;
 
   const list: Record[] = [];
   let contentIndex: number,
@@ -197,44 +197,44 @@ function main(correctFilePath?: string, outFilePath?: string,statsFilePath?:stri
           Price : 
           {
             correct: data[correctPriceIndex],
-            hsyExt: HsyExtractor.extractPrice(content),
+            hsyExtraction: HsyExtractor.extractPrice(content),
           },
           FullAddr : 
           {
             correct: data[correctFullAddrIndex],
-            hsyExt: HsyExtractor.extractFullAddr(content),
+            hsyExtraction: HsyExtractor.extractFullAddr(content),
           },
           City : 
           {
             correct: data[correctCityIndex],
-            hsyExt: HsyExtractor.extractCity(content),
+            hsyExtraction: HsyExtractor.extractCity(content),
           },
           Zipcode : 
           {
             correct: data[correctZipcodeIndex],
-            hsyExt: HsyExtractor.extractZipcode(content),
+            hsyExtraction: HsyExtractor.extractZipcode(content),
           },
           Phone : 
           { 
             correct: data[correctPhoneIndex],
-            hsyExt: HsyExtractor.extractPhone(content),
+            hsyExtraction: HsyExtractor.extractPhone(content),
           },
           Wechat :
           {
             correct: data[correctWechatIndex],
-            hsyExt: HsyExtractor.extractWeChat(content),
+            hsyExtraction: HsyExtractor.extractWeChat(content),
           },
           Email : 
           {
             correct: data[correctEmailIndex],
-            hsyExt: HsyExtractor.extractEmail(content),
+            hsyExtraction: HsyExtractor.extractEmail(content),
           },
           CorrectRate :0,
         }
         let correctCount = 0, totalCount = 0;
         for (const key of Object.keys(record).filter(key=>key != "CorrectRate" && key != "Content"))
         {
-          if (extCompare(record[key].correct,record[key].hsyExt))
+          if (extractionSoftEquals(record[key].correct,record[key].hsyExt))
             correctCount++;
           totalCount++;
         }
@@ -250,7 +250,7 @@ function main(correctFilePath?: string, outFilePath?: string,statsFilePath?:stri
       outFile.write(`content,price,full address,city,zipcode,phone,wechat,email,correct rate,\n`); 
       // add one more field for csv to avoid reading issue 
       for (const record of list)
-        outFile.write(`"${record.Content}",${record.Price.hsyExt},${record.FullAddr.hsyExt},${record.City.hsyExt},${record.Zipcode.hsyExt},${record.Phone.hsyExt},${record.Wechat.hsyExt},${record.Email.hsyExt},${record.CorrectRate},\n`);
+        outFile.write(`"${record.Content}",${record.Price.hsyExtraction},${record.FullAddr.hsyExtraction},${record.City.hsyExtraction},${record.Zipcode.hsyExtraction},${record.Phone.hsyExtraction},${record.Wechat.hsyExtraction},${record.Email.hsyExtraction},${record.CorrectRate},\n`);
       outFile.close();
       
       const correctStats: Stat = createStat();
@@ -261,23 +261,23 @@ function main(correctFilePath?: string, outFilePath?: string,statsFilePath?:stri
       { 
         for (const key of Object.keys(record).filter(key => (key != 'Content' && key != 'CorrectRate')))
         {
-          if (!extCompare(record[key].correct, 'N/A') || !extCompare(record[key].hsyExt,'N/A'))
+          if (!extractionSoftEquals(record[key].correct, 'N/A') || !extractionSoftEquals(record[key].hsyExt,'N/A'))
           {
-            if (extCompare(record[key].correct, record[key].hsyExt))
+            if (extractionSoftEquals(record[key].correct, record[key].hsyExt))
               correctStats[key].rate++;
             correctStats[key].count++;
           }
           
-          if(!extCompare(record[key].correct, 'N/A'))
+          if(!extractionSoftEquals(record[key].correct, 'N/A'))
           {
-            if (extCompare(record[key].correct, record[key].hsyExt))
+            if (extractionSoftEquals(record[key].correct, record[key].hsyExt))
               recallStats[key].rate++;
             recallStats[key].count++;
           }
           
-          if (!extCompare(record[key].hsyExt, 'N/A'))
+          if (!extractionSoftEquals(record[key].hsyExt, 'N/A'))
           {
-            if (extCompare(record[key].correct, record[key].hsyExt))
+            if (extractionSoftEquals(record[key].correct, record[key].hsyExt))
               precisionStats[key].rate++;
             precisionStats[key].count++;
           }
