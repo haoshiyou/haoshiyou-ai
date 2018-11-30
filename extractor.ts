@@ -62,12 +62,12 @@ export class HsyExtractor
      *
      * @static
      * @param {string} msg: input message
-     * @param {*} data
+     * @param {*} [data]
      * @returns {string}
      * @memberof HsyExtractor
      * @author Renjie Weng
      */
-    public static extractTitle(msg: string, data): string
+    public static extractTitle(msg: string, data?:any): string
     {
         // 第一个非空行
         // 不小于10个char
@@ -82,7 +82,7 @@ export class HsyExtractor
             startIndex = endIndex + 1;
             endIndex = msg.indexOf('\n', startIndex);
         }
-        return '____';
+        return 'N/A';
     }
 
     /**
@@ -90,12 +90,12 @@ export class HsyExtractor
      *
      * @static
      * @param {string} msg
-     * @param {*} data
+     * @param {*} [data]
      * @returns {*}
      * @memberof HsyExtractor
      * @author Renjie Weng
      */
-    public static extractPrice(msg: string, data)
+    public static extractPrice(msg: string, data?)
     {
         // Not a phone number
         // Not a street number
@@ -108,7 +108,7 @@ export class HsyExtractor
         if (HsyExtractor.__DEBUG__)
             console.log(`${JSON.stringify(numbers)}`);
         if (!numbers)
-            return '____';
+            return 'N/A';
 
         const priorities = Array.from(Array(numbers.length), () => 0)
         for (let i = 0; i < numbers.length; i++)
@@ -137,7 +137,7 @@ export class HsyExtractor
                 }, null, ' ')}`);
         }
         const price = this.pickMaximumPriority(numbers, priorities);
-        return price == HsyExtractor.YEAR ? '____' : price;
+        return price == HsyExtractor.YEAR ? 'N/A' : price;
     }
 
     /**
@@ -145,12 +145,12 @@ export class HsyExtractor
      *
      * @static
      * @param {string} msg
-     * @param {*} data
+     * @param {*} [data]
      * @returns {string}
      * @memberof HsyExtractor
      * @author Renjie Weng, Zainan Victor Zhou
      */
-    public static extractPhone(msg: string, data): string
+    public static extractPhone(msg: string, data?:any): string
     {
         // Not part of a URL (espectially not in a Craigslist URL)
         const reg = /\b\d{3}[-\ ]?\d{3}[-\ ]?\d{4}\b/g;
@@ -159,7 +159,7 @@ export class HsyExtractor
         if (HsyExtractor.__DEBUG__)
             console.log(' --- phones: ', ret);
         if (!ret)
-            return '____';
+            return 'N/A';
 
         if (HsyExtractor.__DEBUG__)
             console.log(`${JSON.stringify({
@@ -174,12 +174,12 @@ export class HsyExtractor
      *
      * @static
      * @param {string} msg
-     * @param {*} data
+     * @param {*} [data]
      * @returns {string}
      * @memberof HsyExtractor
      * @author Renjie Weng, Zainan Victor Zhou
      */
-    public static extractEmail(msg: string, data): string
+    public static extractEmail(msg: string, data?:any): string
     {
         // https://www.regular-expressions.info/email.html
         const reg = /([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)/g;
@@ -188,7 +188,7 @@ export class HsyExtractor
         if (HsyExtractor.__DEBUG__)
             console.log(' --- email: ', ret);
         if (!ret)
-            return '____';
+            return 'N/A';
 
         if (HsyExtractor.__DEBUG__)
             console.log(`${JSON.stringify({
@@ -203,12 +203,12 @@ export class HsyExtractor
      *
      * @static
      * @param {string} msg
-     * @param {*} data
+     * @param {*} [data]
      * @returns {string}
      * @memberof HsyExtractor
      * @author Renjie Weng, Zainan Victor Zhou
      */
-    public static extractZipcode(msg: string, data): string
+    public static extractZipcode(msg: string, data?:any): string
     {
         // 在地址中靠后的
         // 出现过多次的(title, address)
@@ -220,7 +220,7 @@ export class HsyExtractor
             console.log('numbers: ', numbers);
 
         if (!numbers)
-            return '____';
+            return 'N/A';
 
         const priorities = Array.from(Array(numbers.length), () => 0);
         for (let i = 0; i < numbers.length; i++)
@@ -251,13 +251,13 @@ export class HsyExtractor
      *
      * @static
      * @param {string} msg
-     * @param {*} data
+     * @param {*} [data]
      * @returns {string}
      * @memberof HsyExtractor
      * @author Zainan Victor Zhou
      * @todo clean code, and should return string
      */
-    public static extractWeChat(msg: string, data): string
+    public static extractWeChat(msg: string, data?:any): string
     {
         // let reg = /(微信|WeChat|WeiXin)(\ ?ID)?[:：\ ]*[A-Za-z0-9_]+\b/i;
         // let reg = /(微信|WeChat|Weixin)/i;
@@ -265,12 +265,12 @@ export class HsyExtractor
         const reg = /(微信|WeChat|Weixin)\ *(敬)?(请)?(联系|加)?(或电话)?\ *(号码|账号|帳號|號|号|id)?\ *(:|：)*\ *\W{0,6}([a-zA-Z0-9_-])+/i;
         const firstRet = msg.match(reg);
         if (!firstRet)
-            return '____';
+            return 'N/A';
 
         const regSecond = /([a-zA-Z0-9_-]){6,20}$/i;
         const secondRet = firstRet[0].match(regSecond);
         if (!secondRet)
-            return '____';
+            return 'N/A';
 
         if (HsyExtractor.__DEBUG__)
             console.log(`${JSON.stringify({
@@ -286,12 +286,12 @@ export class HsyExtractor
      *
      * @static
      * @param {string} msg
-     * @param {*} data
+     * @param {*} [data]
      * @returns {string}
      * @memberof HsyExtractor
      * @author Zainan Victor Zhou
      */
-    public static extractCity(msg: string, data): string
+    public static extractCity(msg: string, data?:any): string
     {
         // if ZIPCODE is provided, not extract CITY
         const chineseCityToEnglish = {
@@ -334,8 +334,7 @@ export class HsyExtractor
         };
 
         const cityList = [
-            'sunnyvale', 'mountain view', 'north san jose', 'south san jose', 'san jose', 'san bruno', 'daly city', 'south san francisco', 'downtown francisco', 'san francisco', 'palo alto', 'redwood city', 'fremont', 'santa clara', 'mtv', "Alameda", "El Cerrito", "Mountain View", "San Leandro", "Albany", "Emeryville", "Napa", "San Mateo", "American Canyon", "Fairfax", "Newark", "San Pablo", "Antioch", "Fairfield", "Novato", "San Rafael", "Atherton", "Foster City", "Oakland", "San Ramon", "Belmont", "Fremont", "Oakley", "Santa Clara", "Belvedere", "Gilroy", "Orinda", "Santa Rosa", "Benicia", "Half Moon Bay", "Pacifica", "Saratoga", "Berkeley", "Hayward", "Palo Alto", "Sausalito", "Brentwood", "Healdsburg", "Petaluma", "Sebastopol", "Brisbane", "Hercules", "Piedmont", "Sonoma", "Burlingame", "Hillsborough", "Pinole", "South San Francisco", "Calistoga", "Lafayette", "Pittsburg", "St. Helena", "Campbell", "Larkspur", "Pleasant Hill", "Suisun City", "Clayton", "Livermore", "Pleasanton", "Sunnyvale", "Cloverdale", "Los Altos", "Portola Valley", "Tiburon", "Colma", "Los Altos Hills", "Redwood City", "Union City", "Concord", "Los Gatos", "Richmond", "Vacaville", "Corte Madera", "Martinez", "Rio Vista", "Vallejo", "Cotati", "Menlo Park", "Rohnert Park", "Walnut Creek", "Cupertino", "Mill Valley", "Ross", "Windsor", "Daly City", "Millbrae", "San Anselmo", "Woodside", "Danville", "Milpitas", "San Bruno", "Yountville", "Dixon", "Monte Sereno", "San Carlos", "Dublin", "Moraga", "San Francisco", "East Palo Alto", "Morgan Hill", "San Jose", // From http://www.bayareacensus.ca.gov/cities/cities.htm
-            "Stanford",
+            'sunnyvale', 'mountain view', 'north san jose', 'south san jose', 'san jose', 'san bruno', 'daly city', 'south san francisco', 'downtown francisco', 'san francisco', 'palo alto', 'redwood city', 'fremont', 'santa clara', 'mtv', "Alameda", "El Cerrito", "Mountain View", "San Leandro", "Albany", "Emeryville", "Napa", "San Mateo", "American Canyon", "Fairfax", "Newark", "San Pablo", "Antioch", "Fairfield", "Novato", "San Rafael", "Atherton", "Foster City", "Oakland", "San Ramon", "Belmont", "Fremont", "Oakley", "Santa Clara", "Belvedere", "Gilroy", "Orinda", "Santa Rosa", "Benicia", "Half Moon Bay", "Pacifica", "Saratoga", "Berkeley", "Hayward", "Palo Alto", "Sausalito", "Brentwood", "Healdsburg", "Petaluma", "Sebastopol", "Brisbane", "Hercules", "Piedmont", "Sonoma", "Burlingame", "Hillsborough", "Pinole", "South San Francisco", "Calistoga", "Lafayette", "Pittsburg", "St. Helena", "Campbell", "Larkspur", "Pleasant Hill", "Suisun City", "Clayton", "Livermore", "Pleasanton", "Sunnyvale", "Cloverdale", "Los Altos", "Portola Valley", "Tiburon", "Colma", "Los Altos Hills", "Redwood City", "Union City", "Concord", "Los Gatos", "Richmond", "Vacaville", "Corte Madera", "Martinez", "Rio Vista", "Vallejo", "Cotati", "Menlo Park", "Rohnert Park", "Walnut Creek", "Cupertino", "Mill Valley", "Ross", "Windsor", "Daly City", "Millbrae", "San Anselmo", "Woodside", "Danville", "Milpitas", "San Bruno", "Yountville", "Dixon", "Monte Sereno", "San Carlos", "Dublin", "Moraga", "San Francisco", "East Palo Alto", "Morgan Hill", "San Jose", "Stanford", // From http://www.bayareacensus.ca.gov/cities/cities.htm
         ].concat(Object.keys(chineseCityToEnglish))
             .map(s => s.toUpperCase());
         const regStr = `(${cityList.join('|')})`;
@@ -343,7 +342,7 @@ export class HsyExtractor
         const reg = new RegExp(regStr);
         const ret = msg.toUpperCase().match(reg);
         if(!ret)
-            return '____';
+            return 'N/A';
 
         let city = ret[0];
         if (chineseCityToEnglish[city])
@@ -361,19 +360,19 @@ export class HsyExtractor
      *
      * @static
      * @param {string} msg
-     * @param {*} data
+     * @param {*} [data]
      * @returns
      * @memberof HsyExtractor
      * @author Renjie Weng, Zainan Victor Zhou
      */
-    public static extractFullAddr(msg: string, data): string
+    public static extractFullAddr(msg: string, data?:any): string
     {
         // In address form
         const reg = /\d+.+(?=CA)[A-Z]{2}[, ]+\d{5}(?:-\d{4})?/;
         const ret = msg.toUpperCase().match(reg);
 
-        if (!ret && ret[0])
-            return '____';
+        if (!ret || !ret[0])
+            return 'N/A';
         
         if (HsyExtractor.__DEBUG__) 
             console.log(`${JSON.stringify({
@@ -388,12 +387,12 @@ export class HsyExtractor
      * @private
      * @static
      * @param {*} msg
-     * @param {*} data
+     * @param {*} [data]
      * @returns
      * @memberof HsyExtractor
      * @author Renjie Weng
      */
-    private static findAddrByCaliforniaAndZip(msg, data)
+    private static findAddrByCaliforniaAndZip(msg, data?:any)
     {
         let reg = /\d+.+(?=CA|California)[A-Z]{2}[, ]+\d{5}(?:-\d{4})?/;
         let ret = msg.toUpperCase().match(reg);
