@@ -17,7 +17,9 @@
   "license": "MIT",
   "description": "This is the extraction algorithm that extracts data from the message.",
   "main": "main.ts",
-  "devDependencies": {},
+  "devDependencies": {
+    "git-scripts": "git+https://github.com/nkzawa/git-scripts.git"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
