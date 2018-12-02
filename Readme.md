@@ -1,5 +1,6 @@
 # Haoshiyou AI
 
+[![Build Status](https://travis-ci.com/xinbenlv/haoshiyou-ai.svg?branch=master)](https://travis-ci.com/xinbenlv/haoshiyou-ai)  
 This is the extraction algorithm that extracts data from the message.
 
 ## USAGE

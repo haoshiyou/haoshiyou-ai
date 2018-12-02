@@ -3,7 +3,6 @@ import { HsyExtractor } from './extractor';
 import * as fs from 'fs';
 import * as csv from 'csv-parse';
 
-
 /*
 REF: https://blog.argcv.com/articles/1036.c
 精确率(precision)的公式是P = \frac{TP}{TP+FP}, 它计算的是所有"正确被检索的结果(TP)"占所有"实际被检索到的(TP+FP)"的比例.
@@ -18,6 +17,7 @@ REF: https://blog.argcv.com/articles/1036.c
  *
  * @returns {string}
  */
+
 function getNow(): string
 {
   let clock: Date = new Date()
@@ -234,7 +234,7 @@ function main(correctFilePath?: string, outFilePath?: string,statsFilePath?:stri
         let correctCount = 0, totalCount = 0;
         for (const key of Object.keys(record).filter(key=>key != "CorrectRate" && key != "Content"))
         {
-          if (extractionSoftEquals(record[key].correct,record[key].hsyExt))
+          if (extractionSoftEquals(record[key].correct, record[key].hsyExtraction))
             correctCount++;
           totalCount++;
         }
@@ -261,23 +261,23 @@ function main(correctFilePath?: string, outFilePath?: string,statsFilePath?:stri
       { 
         for (const key of Object.keys(record).filter(key => (key != 'Content' && key != 'CorrectRate')))
         {
-          if (!extractionSoftEquals(record[key].correct, 'N/A') || !extractionSoftEquals(record[key].hsyExt,'N/A'))
+          if (!extractionSoftEquals(record[key].correct, 'N/A') || !extractionSoftEquals(record[key].hsyExtraction,'N/A'))
           {
-            if (extractionSoftEquals(record[key].correct, record[key].hsyExt))
+            if (extractionSoftEquals(record[key].correct, record[key].hsyExtraction))
               correctStats[key].rate++;
             correctStats[key].count++;
           }
           
           if(!extractionSoftEquals(record[key].correct, 'N/A'))
           {
-            if (extractionSoftEquals(record[key].correct, record[key].hsyExt))
+            if (extractionSoftEquals(record[key].correct, record[key].hsyExtraction))
               recallStats[key].rate++;
             recallStats[key].count++;
           }
           
-          if (!extractionSoftEquals(record[key].hsyExt, 'N/A'))
+          if (!extractionSoftEquals(record[key].hsyExtraction, 'N/A'))
           {
-            if (extractionSoftEquals(record[key].correct, record[key].hsyExt))
+            if (extractionSoftEquals(record[key].correct, record[key].hsyExtraction))
               precisionStats[key].rate++;
             precisionStats[key].count++;
           }

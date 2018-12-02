@@ -1,0 +1,16 @@
+language: node_js
+node_js:
+  - "8"
+  - "9"
+  - "10"
+  - "node"
+sudo: enabled
+os: linux
+before_install:
+  - npm install -g ts-node
+  - npm install -g typescript
+  - npm install -g tsc
+install:
+  - npm install
+script:
+  - ./scripts/runReport.sh
