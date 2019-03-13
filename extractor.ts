@@ -76,7 +76,7 @@ export class HsyExtractor
             endIndex = msg.indexOf("\n");
         while (endIndex != - 1)
         {
-            let line = msg.substring(startIndex, endIndex).trim();
+            let line = msg.substring(startIndex, endIndex).trim().replace('\n','');
             if (line.length >= 10)
                 return line.length > 70 ? line.substring(0, 70) : line;
             startIndex = endIndex + 1;
