@@ -1,5 +1,5 @@
 import { csvOption } from './config';
-import { HsyExtractor } from './extractor';
+import { HsyExtractor } from '../extractor';
 import * as fs from 'fs';
 import * as csv from 'csv-parse';
 

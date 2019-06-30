@@ -18,7 +18,10 @@
   "description": "This is the extraction algorithm that extracts data from the message.",
   "main": "main.ts",
   "devDependencies": {
-    "git-scripts": "git+https://github.com/nkzawa/git-scripts.git"
+    "git-scripts": "git+https://github.com/nkzawa/git-scripts.git",
+    "ts-node": "^8.3.0",
+    "tsc": "^1.20150623.0",
+    "typescript": "^3.5.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -30,14 +33,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xinbenlv/haoshiyou-ai.git"
+    "url": "git+https://github.com/haoshiyou/haoshiyou-ai.git"
   },
   "keywords": [
     "haoshiyou"
   ],
-  "author": "Zainan Victor Zhou",
+  "author": "Zainan Victor Zhou, Renjie Weng, William Chen",
   "bugs": {
-    "url": "https://github.com/xinbenlv/haoshiyou-ai/issues"
+    "url": "https://github.com/haoshiyou/haoshiyou-ai/issues"
   },
-  "homepage": "https://github.com/xinbenlv/haoshiyou-ai#readme"
+  "homepage": "https://github.com/haoshiyou/haoshiyou-ai#readme"
 }

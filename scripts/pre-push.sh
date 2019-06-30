@@ -5,12 +5,14 @@ set -e
 [ -n "$NO_HOOK" ] && exit 0
 echo "start pre-push hook"
 
-ts-node "report.ts" "testdata/labeling-data-10252018205253_Done.csv" "tmp/test_out.csv" "stats/stats"
-result=$(git diff "stats/stats" 2>&1)
+## TODO(kis87988) can we merge this d with the runReport.sh?
+mkdir -p tmp
+npx ts-node "./training/report.ts" "./training/testdata/2018-labeled-data.csv" "tmp/test_out.csv" "tmp/test_stats"
+result=$(diff "./training/stats/stats" "tmp/test_stats" 2>&1)
 [ ! -z "${result}" ] && {
   echo "different stats file, commiting now..."
-  git add "stats/stats"
-  git commit -m "update report" 
+  git add "./training/stats/stats"
+  git commit -m "update report"
 }
 NO_HOOK=1 git push
 

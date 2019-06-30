@@ -13,4 +13,5 @@ before_install:
 install:
   - npm install
 script:
+  # TODO fix this once we move this folder to public.
   - ./scripts/runReport.sh
