@@ -13,18 +13,12 @@ You should have Node and NPM installed. We also recommend NVM to manage multiple
 npm i # this install all packages indeed.
 ```
 
-##` for test function only
-```bash
-npx ts-node extractor.ts '地址1220 N FAIR OAKS AVE, #13074, SUNNYVALE, CA; 价格: $5,000(1000元 utility); 电话: 481-880-0123'
-```
-##` for batch test
-
-```bash
-npx ts-node test-batch-drive.ts
-```
-
 It reads the csv mapping file from "../input/testdata.csv", then fetches each test case from "../testdata/<filename>",applies the rules to fetch the attributes of that test case.
 
-##` Bugs
+## Known Bugs
 
 1. when price not provided, any number can be a price in result;
+
+## Reference Readings 
+* This NPM package is based on the instruction of [Step by step: Building and publishing an NPM Typescript package.](https://itnext.io/step-by-step-building-and-publishing-an-npm-typescript-package-44fe7164964c)
+

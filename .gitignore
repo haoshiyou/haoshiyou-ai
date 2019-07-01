@@ -77,3 +77,4 @@ potential-posting.json
 .pki
 *.js
 *.js.map
+./lib
