@@ -1,6 +1,6 @@
 {
   "name": "haoshiyou-ai",
-  "version": "1.0.0-rc.0",
+  "version": "1.0.0",
   "dependencies": {
     "@google-cloud/pubsub": "^0.20.1",
     "@google/maps": "^0.5.5",
@@ -26,7 +26,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build" : "tsc",
+    "build": "tsc",
     "prepare": "npm run build",
     "version": "git add -A src",
     "postversion": "git push && git push --tags"
@@ -49,6 +49,8 @@
   "bugs": {
     "url": "https://github.com/haoshiyou/haoshiyou-ai/issues"
   },
-  "files": ["lib/**/*"],
+  "files": [
+    "lib/**/*"
+  ],
   "homepage": "https://github.com/haoshiyou/haoshiyou-ai#readme"
 }

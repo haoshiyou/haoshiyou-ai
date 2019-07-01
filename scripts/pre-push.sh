@@ -41,4 +41,4 @@ echo
 echo
 echo "PRE-PUSH HOOK PASSED"
 echo
-exit 999
+exit 0
