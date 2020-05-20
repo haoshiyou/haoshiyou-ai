@@ -1,5 +1,6 @@
+
 const googleMapsClient = require('@google/maps').createClient({
-    key: 'AIzaSyAvTvxqZ2Qx6Em1XdgbIFYa4UOuZ8l85bc'
+    key: process.env.GOOGLE_MAPS_KEY || 'AIzaSyCyTWEqzn2xGOMiDkfE8hlVn2EwCmKnavw' // until we get abused.
 });
 
 /**
